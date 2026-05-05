@@ -27,7 +27,9 @@ import {
   getLabelDescription,
   hasFiltersApplied,
   isValueDifferentFromDefault,
+  hasMultipleSourceCategories,
 } from '~/app/pages/modelCatalog/utils/modelCatalogUtils';
+import ModelCatalogSortDropdown from '~/app/pages/modelCatalog/components/ModelCatalogSortDropdown';
 import EmptyModelCatalogState from '~/app/pages/modelCatalog/EmptyModelCatalogState';
 import ScrollViewOnMount from '~/app/shared/components/ScrollViewOnMount';
 import {
@@ -301,9 +303,17 @@ const ModelCatalogGalleryView: React.FC<ModelCatalogPageProps> = ({
       <ScrollViewOnMount shouldScroll scrollToTop />
       {isSingleCategory && categoryTitle && (
         <div className="pf-v6-u-mb-lg" data-testid="single-category-header">
-          <Title headingLevel="h3" size="lg">
-            {categoryTitle}
-          </Title>
+          <Flex
+            justifyContent={{ default: 'justifyContentSpaceBetween' }}
+            alignItems={{ default: 'alignItemsCenter' }}
+          >
+            <Title headingLevel="h3" size="lg">
+              {categoryTitle}
+            </Title>
+            {performanceViewEnabled && !hasMultipleSourceCategories(catalogSources) && (
+              <ModelCatalogSortDropdown performanceViewEnabled={performanceViewEnabled} />
+            )}
+          </Flex>
           {categoryDescription && (
             <Content component="p" className="pf-v6-u-color-200 pf-v6-u-mt-sm">
               {categoryDescription}
