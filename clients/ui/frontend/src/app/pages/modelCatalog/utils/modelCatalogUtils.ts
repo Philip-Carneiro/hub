@@ -769,9 +769,7 @@ export const getActiveSourceLabels = (
   return orderedLabels;
 };
 
-export const hasMultipleSourceCategories = (
-  catalogSources: CatalogSourceList | null,
-): boolean => {
+export const hasMultipleSourceCategories = (catalogSources: CatalogSourceList | null): boolean => {
   const enabledSources = filterEnabledCatalogSources(catalogSources);
   const uniqueLabels = getUniqueSourceLabels(enabledSources);
   const categoryCount = uniqueLabels.length + (hasSourcesWithoutLabels(enabledSources) ? 1 : 0);

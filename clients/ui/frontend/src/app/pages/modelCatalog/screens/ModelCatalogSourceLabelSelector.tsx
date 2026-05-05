@@ -134,9 +134,9 @@ const ModelCatalogSourceLabelSelector: React.FC<ModelCatalogSourceLabelSelectorP
           // When performance view is ON, the HardwareConfigurationFilterToolbar handles resetting
           {...(onResetAllFilters && !performanceViewEnabled && hasBasicFiltersApplied
             ? {
-              clearAllFilters: handleClearAllFilters,
-              clearFiltersButtonText: 'Reset all filters',
-            }
+                clearAllFilters: handleClearAllFilters,
+                clearFiltersButtonText: 'Reset all filters',
+              }
             : {})}
         >
           <ToolbarContent rowWrap={{ default: 'wrap' }}>
