@@ -769,13 +769,6 @@ export const getActiveSourceLabels = (
   return orderedLabels;
 };
 
-export const hasMultipleSourceCategories = (catalogSources: CatalogSourceList | null): boolean => {
-  const enabledSources = filterEnabledCatalogSources(catalogSources);
-  const uniqueLabels = getUniqueSourceLabels(enabledSources);
-  const categoryCount = uniqueLabels.length + (hasSourcesWithoutLabels(enabledSources) ? 1 : 0);
-  return categoryCount > 1;
-};
-
 /**
  * Formats model type value for display in the UI.
  * Converts raw API values (generative, predictive, unknown) to user-friendly display labels.

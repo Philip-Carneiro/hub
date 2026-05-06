@@ -22,7 +22,7 @@ import ThemeAwareSearchInput from '~/app/pages/modelRegistry/screens/components/
 import { ModelCatalogContext } from '~/app/context/modelCatalog/ModelCatalogContext';
 import {
   hasFiltersApplied,
-  hasMultipleSourceCategories,
+  getActiveSourceLabels,
 } from '~/app/pages/modelCatalog/utils/modelCatalogUtils';
 import ModelCatalogSortDropdown from '~/app/pages/modelCatalog/components/ModelCatalogSortDropdown';
 import ModelCatalogSourceLabelBlocks from './ModelCatalogSourceLabelBlocks';
@@ -44,6 +44,7 @@ const ModelCatalogSourceLabelSelector: React.FC<ModelCatalogSourceLabelSelectorP
   const { isMUITheme } = useThemeContext();
   const {
     catalogSources,
+    catalogLabels,
     filterData,
     performanceViewEnabled,
     performanceFiltersChangedOnDetailsPage,
@@ -52,8 +53,8 @@ const ModelCatalogSourceLabelSelector: React.FC<ModelCatalogSourceLabelSelectorP
   } = React.useContext(ModelCatalogContext);
 
   const hasMultipleCategories = React.useMemo(
-    () => hasMultipleSourceCategories(catalogSources),
-    [catalogSources],
+    () => getActiveSourceLabels(catalogSources, catalogLabels).length > 1,
+    [catalogSources, catalogLabels],
   );
 
   // Only show basic filters in the main chip bar - performance filters have their own section

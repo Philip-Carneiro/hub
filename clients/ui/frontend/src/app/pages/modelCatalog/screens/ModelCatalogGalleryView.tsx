@@ -27,7 +27,6 @@ import {
   getLabelDescription,
   hasFiltersApplied,
   isValueDifferentFromDefault,
-  hasMultipleSourceCategories,
 } from '~/app/pages/modelCatalog/utils/modelCatalogUtils';
 import ModelCatalogSortDropdown from '~/app/pages/modelCatalog/components/ModelCatalogSortDropdown';
 import EmptyModelCatalogState from '~/app/pages/modelCatalog/EmptyModelCatalogState';
@@ -267,7 +266,7 @@ const ModelCatalogGalleryView: React.FC<ModelCatalogPageProps> = ({
         testid="empty-model-catalog-state"
         title="No models available"
         headerIcon={SearchIcon}
-        description="No models are available in this category."
+        description="No models are available in this category"
       />
     );
   }
@@ -310,7 +309,7 @@ const ModelCatalogGalleryView: React.FC<ModelCatalogPageProps> = ({
             <Title headingLevel="h3" size="lg">
               {categoryTitle}
             </Title>
-            {performanceViewEnabled && !hasMultipleSourceCategories(catalogSources) && (
+            {performanceViewEnabled && (
               <ModelCatalogSortDropdown performanceViewEnabled={performanceViewEnabled} />
             )}
           </Flex>

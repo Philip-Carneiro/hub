@@ -486,14 +486,16 @@ describe('Performance Empty State', () => {
   });
 
   describe('Single Category Empty State Actions', () => {
-    it('should show single-category title and description when performance empty state is displayed', () => {
+    beforeEach(() => {
       initIntercepts({
         sources: [mockCatalogSource({ labels: ['Provider one'] })],
         hasValidatedModels: false,
       });
       setupFilteredModelsIntercept({ returnModelsForFilters: false });
       modelCatalog.visit();
+    });
 
+    it('should show single-category title and description when performance empty state is displayed', () => {
       modelCatalog.togglePerformanceView();
       modelCatalog.findPerformanceEmptyState().should('be.visible');
 
@@ -511,13 +513,6 @@ describe('Performance Empty State', () => {
     });
 
     it('should not show "View all models with performance data" button when single category', () => {
-      initIntercepts({
-        sources: [mockCatalogSource({ labels: ['Provider one'] })],
-        hasValidatedModels: false,
-      });
-      setupFilteredModelsIntercept({ returnModelsForFilters: false });
-      modelCatalog.visit();
-
       modelCatalog.togglePerformanceView();
       modelCatalog.findPerformanceEmptyState().should('be.visible');
 
@@ -528,13 +523,6 @@ describe('Performance Empty State', () => {
     });
 
     it('should turn off toggle when clicking "Turn off model performance view" in single category', () => {
-      initIntercepts({
-        sources: [mockCatalogSource({ labels: ['Provider one'] })],
-        hasValidatedModels: false,
-      });
-      setupFilteredModelsIntercept({ returnModelsForFilters: false });
-      modelCatalog.visit();
-
       modelCatalog.togglePerformanceView();
       modelCatalog.findPerformanceEmptyState().should('be.visible');
 
