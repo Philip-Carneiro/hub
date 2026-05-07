@@ -223,7 +223,7 @@ const ModelCatalogGalleryView: React.FC<ModelCatalogPageProps> = ({
         testid="performance-empty-state"
         title={
           isSingleCategory
-            ? 'No performance data available.'
+            ? 'No performance data available'
             : 'No performance data available in selected category'
         }
         headerIcon={ChartBarIcon}

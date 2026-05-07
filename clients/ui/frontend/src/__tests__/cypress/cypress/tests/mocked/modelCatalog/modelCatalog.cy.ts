@@ -501,7 +501,7 @@ describe('Performance Empty State', () => {
 
       modelCatalog
         .findPerformanceEmptyState()
-        .should('contain.text', 'No performance data available.')
+        .should('contain.text', 'No performance data available')
         .and('not.contain.text', 'in selected category');
 
       modelCatalog
