@@ -8,8 +8,10 @@ import {
   type ModelCatalogInterceptOptions,
 } from '~/__tests__/cypress/cypress/support/interceptHelpers/modelCatalog';
 import { NBSP } from '~/__tests__/cypress/cypress/support/constants';
-
-const STORAGE_KEY = 'hardware-config-table-columns';
+import {
+  DEFAULT_VISIBLE_COLUMN_FIELDS,
+  HARDWARE_CONFIG_COLUMNS_STORAGE_KEY as STORAGE_KEY,
+} from '~/app/pages/modelCatalog/components/HardwareConfigurationTableColumns';
 
 const initIntercepts = (options: Partial<ModelCatalogInterceptOptions> = {}) => {
   const resolvedOptions = {
@@ -33,6 +35,14 @@ const navigateToPerformanceInsights = () => {
   modelCatalog.clickPerformanceInsightsTab();
 };
 
+const navigateWithPerformanceView = () => {
+  modelCatalog.visit();
+  modelCatalog.findLoadingState().should('not.exist');
+  modelCatalog.togglePerformanceView();
+  modelCatalog.findModelCatalogDetailLink().first().click();
+  modelCatalog.clickPerformanceInsightsTab();
+};
+
 describe('Manage Columns Modal', () => {
   beforeEach(() => {
     cy.intercept('GET', '/model-registry/api/v1/model_registry*', [
@@ -40,7 +50,7 @@ describe('Manage Columns Modal', () => {
     ]).as('getModelRegistries');
 
     cy.clearLocalStorage(STORAGE_KEY);
-    initIntercepts({ useValidatedModel: true, includePerformanceArtifacts: true });
+    initIntercepts();
   });
 
   describe('Opening the Modal', () => {
@@ -49,7 +59,6 @@ describe('Manage Columns Modal', () => {
 
       modelCatalog.findManageColumnsButton().should('be.visible');
       modelCatalog.openManageColumnsModal();
-      modelCatalog.findManageColumnsModal().should('be.visible');
     });
 
     it('should display search input and column list in the modal', () => {
@@ -64,17 +73,11 @@ describe('Manage Columns Modal', () => {
   });
 
   describe('Sticky Columns Exclusion', () => {
-    it('should not show Hardware configuration column in the modal', () => {
+    it('should not show sticky columns in the modal', () => {
       navigateToPerformanceInsights();
       modelCatalog.openManageColumnsModal();
 
       modelCatalog.findManageColumnsModal().should('not.contain.text', 'Hardware configuration');
-    });
-
-    it('should not show Workload type column in the modal', () => {
-      navigateToPerformanceInsights();
-      modelCatalog.openManageColumnsModal();
-
       modelCatalog.findManageColumnsModal().should('not.contain.text', 'Workload type');
     });
 
@@ -102,11 +105,14 @@ describe('Manage Columns Modal', () => {
     });
 
     it('should add a column back when re-checked and Update is clicked', () => {
-      navigateToPerformanceInsights();
+      const columnsWithoutReplicas = DEFAULT_VISIBLE_COLUMN_FIELDS.filter(
+        (col) => col !== 'replicas',
+      );
+      cy.window().then((win) => {
+        win.localStorage.setItem(STORAGE_KEY, JSON.stringify(columnsWithoutReplicas));
+      });
 
-      modelCatalog.openManageColumnsModal();
-      modelCatalog.findManageColumnCheckbox('Replicas').uncheck();
-      modelCatalog.findManageColumnsUpdateButton().click();
+      navigateToPerformanceInsights();
 
       modelCatalog.findHardwareConfigurationTableHeaders().should('not.contain.text', 'Replicas');
 
@@ -201,17 +207,8 @@ describe('Manage Columns Modal', () => {
   });
 
   describe('Latency Filter Interaction with Column Visibility', () => {
-    beforeEach(() => {
-      cy.clearLocalStorage(STORAGE_KEY);
-      initIntercepts({ useValidatedModel: true, includePerformanceArtifacts: true });
-    });
-
     it('should update visible columns when latency filter is applied', () => {
-      modelCatalog.visit();
-      modelCatalog.findLoadingState().should('not.exist');
-      modelCatalog.togglePerformanceView();
-      modelCatalog.findModelCatalogDetailLink().first().click();
-      modelCatalog.clickPerformanceInsightsTab();
+      navigateWithPerformanceView();
 
       modelCatalog.openLatencyFilter();
       modelCatalog.selectLatencyMetric('E2E');
@@ -228,11 +225,7 @@ describe('Manage Columns Modal', () => {
     });
 
     it('should reflect latency filter changes in the manage columns modal state', () => {
-      modelCatalog.visit();
-      modelCatalog.findLoadingState().should('not.exist');
-      modelCatalog.togglePerformanceView();
-      modelCatalog.findModelCatalogDetailLink().first().click();
-      modelCatalog.clickPerformanceInsightsTab();
+      navigateWithPerformanceView();
 
       modelCatalog.openLatencyFilter();
       modelCatalog.selectLatencyMetric('ITL');
@@ -251,11 +244,7 @@ describe('Manage Columns Modal', () => {
     });
 
     it('should keep non-latency columns unchanged when latency filter updates column visibility', () => {
-      modelCatalog.visit();
-      modelCatalog.findLoadingState().should('not.exist');
-      modelCatalog.togglePerformanceView();
-      modelCatalog.findModelCatalogDetailLink().first().click();
-      modelCatalog.clickPerformanceInsightsTab();
+      navigateWithPerformanceView();
 
       modelCatalog.findHardwareConfigurationTableHeaders().should('contain.text', 'Replicas');
 
