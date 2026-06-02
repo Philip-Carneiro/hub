@@ -1,6 +1,10 @@
 import * as React from 'react';
 import { useQueryParamNamespaces } from 'mod-arch-core';
 import { BFF_API_VERSION, URL_PREFIX } from '~/app/utilities/const';
+import {
+  createCatalogContext,
+  CatalogProviderState,
+} from '~/app/context/catalogContext/createCatalogContext';
 import useModelCatalogAPIState, {
   ModelCatalogAPIState,
 } from '~/app/hooks/modelCatalog/useModelCatalogAPIState';
@@ -11,7 +15,10 @@ import type {
   McpCatalogContextType,
   McpCatalogPaginationState,
 } from '~/app/pages/mcpCatalog/types/mcpCatalogContext';
-import type { McpCatalogFiltersState } from '~/app/pages/mcpCatalog/types/mcpCatalogFilterOptions';
+import type {
+  McpCatalogFiltersState,
+  McpCatalogFilterOptionsList,
+} from '~/app/pages/mcpCatalog/types/mcpCatalogFilterOptions';
 import { useMcpUrlSync } from '~/app/pages/mcpCatalog/hooks/useMcpUrlSync';
 
 export type {
@@ -20,9 +27,8 @@ export type {
 } from '~/app/pages/mcpCatalog/types/mcpCatalogContext';
 export type { McpCatalogFiltersState } from '~/app/pages/mcpCatalog/types/mcpCatalogFilterOptions';
 
-type McpCatalogContextProviderProps = {
-  children: React.ReactNode;
-};
+const MODEL_CATALOG_PATH = `${URL_PREFIX}/api/${BFF_API_VERSION}/model_catalog`;
+const MCP_CATALOG_PATH = `${URL_PREFIX}/api/${BFF_API_VERSION}/mcp_catalog`;
 
 const defaultPagination: McpCatalogPaginationState = {
   page: 1,
@@ -30,7 +36,24 @@ const defaultPagination: McpCatalogPaginationState = {
   totalItems: 0,
 };
 
-export const McpCatalogContext = React.createContext<McpCatalogContextType>({
+type McpCatalogExtension = {
+  filters: McpCatalogFiltersState;
+  setFilters: (
+    filters: McpCatalogFiltersState | ((prev: McpCatalogFiltersState) => McpCatalogFiltersState),
+  ) => void;
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+  namedQuery: string | null;
+  setNamedQuery: (query: string | null) => void;
+  pagination: McpCatalogPaginationState;
+  setPage: (page: number) => void;
+  setPageSize: (pageSize: number) => void;
+  setTotalItems: (totalItems: number) => void;
+  mcpApiState: ModelCatalogAPIState;
+};
+
+// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+const defaultContextValue: McpCatalogContextType = {
   filters: {},
   setFilters: () => undefined,
   searchQuery: '',
@@ -55,14 +78,9 @@ export const McpCatalogContext = React.createContext<McpCatalogContextType>({
   filterOptions: null,
   filterOptionsLoaded: false,
   filterOptionsLoadError: undefined,
-});
+};
 
-const MODEL_CATALOG_PATH = `${URL_PREFIX}/api/${BFF_API_VERSION}/model_catalog`;
-const MCP_CATALOG_PATH = `${URL_PREFIX}/api/${BFF_API_VERSION}/mcp_catalog`;
-
-export const McpCatalogContextProvider: React.FC<McpCatalogContextProviderProps> = ({
-  children,
-}) => {
+function useMcpCatalogExtension(providerState: CatalogProviderState): McpCatalogContextType {
   const queryParams = useQueryParamNamespaces();
   const [apiStateModelCatalog] = useModelCatalogAPIState(MODEL_CATALOG_PATH, queryParams);
   const [apiStateMcpCatalog] = useModelCatalogAPIState(MCP_CATALOG_PATH, queryParams);
@@ -86,13 +104,20 @@ export const McpCatalogContextProvider: React.FC<McpCatalogContextProviderProps>
   const [namedQuery, setNamedQuery] = React.useState<string | null>(null);
   const [pagination, setPaginationState] =
     React.useState<McpCatalogPaginationState>(defaultPagination);
-  const [selectedSourceLabel, setSelectedSourceLabel] = React.useState<string | undefined>(
-    initialState.selectedSourceLabel,
-  );
+
+  const { setSelectedSourceLabel } = providerState;
 
   React.useEffect(() => {
-    syncToUrl({ searchQuery, filters, selectedSourceLabel });
-  }, [searchQuery, filters, selectedSourceLabel, syncToUrl]);
+    setSelectedSourceLabel(initialState.selectedSourceLabel);
+  }, [setSelectedSourceLabel, initialState.selectedSourceLabel]);
+
+  React.useEffect(() => {
+    syncToUrl({
+      searchQuery,
+      filters,
+      selectedSourceLabel: providerState.selectedSourceLabel,
+    });
+  }, [searchQuery, filters, providerState.selectedSourceLabel, syncToUrl]);
 
   const setPage = React.useCallback((page: number) => {
     setPaginationState((prev) => ({ ...prev, page }));
@@ -112,7 +137,7 @@ export const McpCatalogContextProvider: React.FC<McpCatalogContextProviderProps>
     setNamedQuery(null);
   }, []);
 
-  const value = React.useMemo<McpCatalogContextType>(
+  return React.useMemo<McpCatalogContextType>(
     () => ({
       filters,
       setFilters,
@@ -124,8 +149,8 @@ export const McpCatalogContextProvider: React.FC<McpCatalogContextProviderProps>
       setPage,
       setPageSize,
       setTotalItems,
-      selectedSourceLabel,
-      setSelectedSourceLabel,
+      selectedSourceLabel: providerState.selectedSourceLabel,
+      setSelectedSourceLabel: providerState.setSelectedSourceLabel,
       clearAllFilters,
       mcpApiState: apiStateMcpCatalog,
       catalogSources,
@@ -144,7 +169,8 @@ export const McpCatalogContextProvider: React.FC<McpCatalogContextProviderProps>
       searchQuery,
       namedQuery,
       pagination,
-      selectedSourceLabel,
+      providerState.selectedSourceLabel,
+      providerState.setSelectedSourceLabel,
       catalogSources,
       catalogSourcesLoaded,
       catalogSourcesLoadError,
@@ -160,6 +186,18 @@ export const McpCatalogContextProvider: React.FC<McpCatalogContextProviderProps>
       clearAllFilters,
     ],
   );
+}
 
-  return <McpCatalogContext.Provider value={value}>{children}</McpCatalogContext.Provider>;
-};
+const {
+  Context: McpCatalogContext,
+  Provider: McpCatalogContextProvider,
+  useContext: useMcpCatalogContext,
+} = createCatalogContext<McpCatalogFilterOptionsList, McpCatalogExtension>(
+  {
+    displayName: 'McpCatalogContextProvider',
+    useExtension: useMcpCatalogExtension,
+  },
+  defaultContextValue,
+);
+
+export { McpCatalogContext, McpCatalogContextProvider, useMcpCatalogContext };
