@@ -6,6 +6,7 @@ import {
   createCatalogContext,
   CatalogContextValue,
   CatalogProviderState,
+  CatalogCommonData,
 } from '~/app/context/catalogContext/createCatalogContext';
 import { useCatalogFilterOptionList } from '~/app/hooks/modelCatalog/useCatalogFilterOptionList';
 import { useCatalogLabels } from '~/app/hooks/modelCatalog/useCatalogLabels';
@@ -82,51 +83,20 @@ type ModelCatalogExtension = {
 export type ModelCatalogContextType = CatalogContextValue<CatalogFilterOptionsList> &
   ModelCatalogExtension;
 
-// eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-const defaultContextValue: ModelCatalogContextType = {
-  catalogSourcesLoaded: false,
-  catalogSourcesLoadError: undefined,
-  catalogSources: null,
-  catalogLabels: null,
-  catalogLabelsLoaded: false,
-  catalogLabelsLoadError: undefined,
-  selectedSource: undefined,
-  updateSelectedSource: () => undefined,
-  selectedSourceLabel: undefined,
-  setSelectedSourceLabel: () => undefined,
-  // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-  apiState: { apiAvailable: false, api: null as unknown as ModelCatalogAPIState['api'] },
-  refreshAPIState: () => undefined,
-  filters: INITIAL_FILTERS,
-  setFilters: () => undefined,
-  filterOptions: null,
-  filterOptionsLoaded: false,
-  filterOptionsLoadError: undefined,
-  performanceViewEnabled: false,
-  setPerformanceViewEnabled: () => undefined,
-  performanceFiltersChangedOnDetailsPage: false,
-  setPerformanceFiltersChangedOnDetailsPage: () => undefined,
-  lastViewedModelName: null,
-  setLastViewedModelName: () => undefined,
-  clearAllFilters: () => undefined,
-  resetPerformanceFiltersToDefaults: () => undefined,
-  resetSinglePerformanceFilterToDefault: () => undefined,
-  getPerformanceFilterDefaultValue: () => undefined,
-  sortBy: null,
-  setSortBy: () => undefined,
-};
-
-function useModelCatalogExtension(providerState: CatalogProviderState): ModelCatalogContextType {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function useModelCatalogSetup(providerState: CatalogProviderState) {
   const queryParams = useQueryParamNamespaces();
   const [apiState, refreshAPIState] = useModelCatalogAPIState(MODEL_CATALOG_HOST_PATH, queryParams);
+
   const [catalogSources, catalogSourcesLoaded, catalogSourcesLoadError] =
     useCatalogSources(apiState);
   const [catalogLabels, catalogLabelsLoaded, catalogLabelsLoadError] = useCatalogLabels(apiState);
+  const [filterOptions, filterOptionsLoaded, filterOptionsLoadError] =
+    useCatalogFilterOptionList(apiState);
+
   const [selectedSource, setSelectedSource] = React.useState<CatalogSource | undefined>(undefined);
   const [filterState, baseSetFilterData, , replaceFilterState] =
     useGenericObjectState<ModelCatalogFilterStates>(INITIAL_FILTERS);
-  const [filterOptions, filterOptionsLoaded, filterOptionsLoadError] =
-    useCatalogFilterOptionList(apiState);
   const [basePerformanceViewEnabled, setBasePerformanceViewEnabled] = React.useState(false);
   const [performanceFiltersChangedOnDetailsPage, setPerformanceFiltersChangedOnDetailsPage] =
     React.useState(false);
@@ -156,14 +126,11 @@ function useModelCatalogExtension(providerState: CatalogProviderState): ModelCat
    * This is the single function for "clearing" or "resetting" performance filters.
    */
   const resetPerformanceFiltersToDefaults = React.useCallback(() => {
-    // First, clear ALL latency filters (only one should be active at a time)
-    // This ensures any non-default latency filter is removed before applying defaults
     ALL_LATENCY_FILTER_KEYS.forEach((latencyKey) => {
       baseSetFilterData(latencyKey, undefined);
     });
     baseSetFilterData(ModelCatalogStringFilterKey.HARDWARE_CONFIGURATION, []);
 
-    // Then apply all defaults from namedQueries
     const defaultQuery = filterOptions?.namedQueries?.[DEFAULT_PERFORMANCE_FILTERS_QUERY_NAME];
     if (defaultQuery) {
       applyNamedQueryDefaults(defaultQuery);
@@ -174,10 +141,6 @@ function useModelCatalogExtension(providerState: CatalogProviderState): ModelCat
     }
   }, [filterOptions?.namedQueries, applyNamedQueryDefaults, baseSetFilterData, isOnDetailsPage]);
 
-  /**
-   * Clears basic filters (Task, Provider, License, Language, Tensor Type) to empty.
-   * Note: BASIC_FILTER_KEYS in const.ts should be updated if basic filters change.
-   */
   const clearBasicFilters = React.useCallback(() => {
     baseSetFilterData(ModelCatalogStringFilterKey.TASK, []);
     baseSetFilterData(ModelCatalogStringFilterKey.PROVIDER, []);
@@ -187,9 +150,6 @@ function useModelCatalogExtension(providerState: CatalogProviderState): ModelCat
     baseSetFilterData(ModelCatalogStringFilterKey.VALIDATED_CONFIGURATION, []);
   }, [baseSetFilterData]);
 
-  /**
-   * Clears all filters: basic filters to empty, performance filters to defaults.
-   */
   const clearAllFilters = React.useCallback(() => {
     clearBasicFilters();
     resetPerformanceFiltersToDefaults();
@@ -198,12 +158,8 @@ function useModelCatalogExtension(providerState: CatalogProviderState): ModelCat
   const setPerformanceViewEnabled = React.useCallback(
     (enabled: boolean) => {
       setBasePerformanceViewEnabled(enabled);
-      // Performance filters always have values (defaults).
-      // When toggle changes, ensure defaults are applied.
-      // When toggle is OFF, filters are just not passed in API calls or shown as chips.
       resetPerformanceFiltersToDefaults();
 
-      // Update sort to default for the new toggle state, preserving user selection if it doesn't match the opposite default
       const defaultSort = getEffectiveSortBy(null, enabled);
       const oppositeDefault = getEffectiveSortBy(null, !enabled);
       setSortBy((currentSortBy) => {
@@ -219,7 +175,6 @@ function useModelCatalogExtension(providerState: CatalogProviderState): ModelCat
 
   /**
    * Resets a single performance filter to its default value from namedQueries.
-   * Used when clicking the undo button on individual performance filter chips.
    *
    * For latency filters: Only one latency filter can be active at a time.
    * When closing any latency chip, we clear ALL latency filters and apply the DEFAULT latency filter.
@@ -228,25 +183,21 @@ function useModelCatalogExtension(providerState: CatalogProviderState): ModelCat
   const resetSinglePerformanceFilterToDefault = React.useCallback(
     (filterKey: keyof ModelCatalogFilterStates) => {
       if (isLatencyFilterKey(filterKey)) {
-        // For latency filters: clear ALL latency filters first
         ALL_LATENCY_FILTER_KEYS.forEach((latencyKey) => {
           baseSetFilterData(latencyKey, undefined);
         });
 
-        // Then apply the default latency filter (which may be a different key, e.g., TTFT when closing ITL)
         const defaultQuery = filterOptions?.namedQueries?.[DEFAULT_PERFORMANCE_FILTERS_QUERY_NAME];
         if (defaultQuery) {
-          // Find the default latency filter from namedQueries
           for (const latencyKey of ALL_LATENCY_FILTER_KEYS) {
             const { hasDefault, value } = getSingleFilterDefault(filterOptions, latencyKey);
             if (hasDefault && value !== undefined) {
               applyFilterValue(baseSetFilterData, latencyKey, value);
-              break; // Only apply the first (and should be only) default latency filter
+              break;
             }
           }
         }
       } else {
-        // Non-latency filters: just reset to default
         const { value } = getSingleFilterDefault(filterOptions, filterKey);
         applyFilterValue(baseSetFilterData, filterKey, value);
       }
@@ -258,14 +209,9 @@ function useModelCatalogExtension(providerState: CatalogProviderState): ModelCat
     [filterOptions, baseSetFilterData, isOnDetailsPage],
   );
 
-  /**
-   * Gets the default value for a performance filter from namedQueries.
-   * Wrapper around the utility function that provides filterOptions from context.
-   */
   const getDefaultValueForPerformanceFilter = React.useCallback(
     (filterKey: keyof ModelCatalogFilterStates): string | number | string[] | undefined => {
       const { value } = getSingleFilterDefault(filterOptions, filterKey);
-      // Return value - the type is already compatible
       if (Array.isArray(value) || typeof value === 'string' || typeof value === 'number') {
         return value;
       }
@@ -292,7 +238,6 @@ function useModelCatalogExtension(providerState: CatalogProviderState): ModelCat
     [replaceFilterState, filterState, isOnDetailsPage],
   );
 
-  // Apply default performance filters on initial load if none are set
   React.useEffect(() => {
     if (
       filterOptionsLoaded &&
@@ -308,32 +253,46 @@ function useModelCatalogExtension(providerState: CatalogProviderState): ModelCat
     resetPerformanceFiltersToDefaults,
   ]);
 
-  return React.useMemo(
+  const catalogData = React.useMemo<CatalogCommonData<CatalogFilterOptionsList>>(
     () => ({
+      catalogSources,
       catalogSourcesLoaded,
       catalogSourcesLoadError,
-      catalogSources,
       catalogLabels,
       catalogLabelsLoaded,
       catalogLabelsLoadError,
+      filterOptions,
+      filterOptionsLoaded,
+      filterOptionsLoadError,
+    }),
+    [
+      catalogSources,
+      catalogSourcesLoaded,
+      catalogSourcesLoadError,
+      catalogLabels,
+      catalogLabelsLoaded,
+      catalogLabelsLoadError,
+      filterOptions,
+      filterOptionsLoaded,
+      filterOptionsLoadError,
+    ],
+  );
+
+  const extension = React.useMemo(
+    () => ({
       selectedSource: selectedSource ?? undefined,
       updateSelectedSource: setSelectedSource,
-      selectedSourceLabel: providerState.selectedSourceLabel,
-      setSelectedSourceLabel: providerState.setSelectedSourceLabel,
       apiState,
       refreshAPIState,
       filters: filterState,
       setFilters,
-      filterOptions,
-      filterOptionsLoaded,
-      filterOptionsLoadError,
+      clearAllFilters,
       performanceViewEnabled: basePerformanceViewEnabled,
       setPerformanceViewEnabled,
       performanceFiltersChangedOnDetailsPage,
       setPerformanceFiltersChangedOnDetailsPage,
       lastViewedModelName,
       setLastViewedModelName,
-      clearAllFilters,
       resetPerformanceFiltersToDefaults,
       resetSinglePerformanceFilterToDefault,
       getPerformanceFilterDefaultValue: getDefaultValueForPerformanceFilter,
@@ -341,46 +300,34 @@ function useModelCatalogExtension(providerState: CatalogProviderState): ModelCat
       setSortBy,
     }),
     [
-      catalogSourcesLoaded,
-      catalogSourcesLoadError,
-      catalogSources,
-      catalogLabels,
-      catalogLabelsLoaded,
-      catalogLabelsLoadError,
       selectedSource,
-      providerState.selectedSourceLabel,
-      providerState.setSelectedSourceLabel,
       apiState,
       refreshAPIState,
       filterState,
       setFilters,
-      filterOptions,
-      filterOptionsLoaded,
-      filterOptionsLoadError,
+      clearAllFilters,
       basePerformanceViewEnabled,
       setPerformanceViewEnabled,
       performanceFiltersChangedOnDetailsPage,
       lastViewedModelName,
-      clearAllFilters,
       resetPerformanceFiltersToDefaults,
       resetSinglePerformanceFilterToDefault,
       getDefaultValueForPerformanceFilter,
       sortBy,
     ],
   );
+
+  return { catalogData, extension };
 }
 
 const {
   Context: ModelCatalogContext,
   Provider: ModelCatalogContextProvider,
   useContext: useModelCatalogContext,
-} = createCatalogContext<CatalogFilterOptionsList, ModelCatalogExtension>(
-  {
-    displayName: 'ModelCatalogContextProvider',
-    initialSelectedSourceLabel: CategoryName.allModels,
-    useExtension: useModelCatalogExtension,
-  },
-  defaultContextValue,
-);
+} = createCatalogContext<CatalogFilterOptionsList, ModelCatalogExtension>({
+  displayName: 'ModelCatalogContextProvider',
+  initialSelectedSourceLabel: CategoryName.allModels,
+  useSetup: useModelCatalogSetup,
+});
 
 export { ModelCatalogContext, ModelCatalogContextProvider, useModelCatalogContext };
