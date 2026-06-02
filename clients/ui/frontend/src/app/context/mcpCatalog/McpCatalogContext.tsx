@@ -10,6 +10,7 @@ import useModelCatalogAPIState from '~/app/hooks/modelCatalog/useModelCatalogAPI
 import { useCatalogSources } from '~/app/hooks/modelCatalog/useCatalogSources';
 import { useCatalogLabels } from '~/app/hooks/modelCatalog/useCatalogLabels';
 import { useMcpServerFilterOptionListWithAPI } from '~/app/hooks/mcpServerCatalog/useMcpServerFilterOptionList';
+import useEmptyCategoryTracking from '~/app/hooks/useEmptyCategoryTracking';
 import type {
   McpCatalogFiltersState,
   McpCatalogFilterOptionsList,
@@ -59,6 +60,7 @@ function useMcpCatalogSetup(providerState: CatalogProviderState) {
     React.useState<McpCatalogPaginationState>(defaultPagination);
 
   const { setSelectedSourceLabel } = providerState;
+  const { emptyCategoryLabels, reportCategoryEmpty } = useEmptyCategoryTracking();
 
   React.useEffect(() => {
     setSelectedSourceLabel(initialState.selectedSourceLabel);
@@ -129,6 +131,8 @@ function useMcpCatalogSetup(providerState: CatalogProviderState) {
       setTotalItems,
       clearAllFilters,
       mcpApiState: apiStateMcpCatalog,
+      emptyCategoryLabels,
+      reportCategoryEmpty,
     }),
     [
       apiStateMcpCatalog,
@@ -140,6 +144,8 @@ function useMcpCatalogSetup(providerState: CatalogProviderState) {
       setPageSize,
       setTotalItems,
       clearAllFilters,
+      emptyCategoryLabels,
+      reportCategoryEmpty,
     ],
   );
 
