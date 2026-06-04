@@ -8,6 +8,7 @@ import {
   Skeleton,
   Stack,
   StackItem,
+  Tooltip,
 } from '@patternfly/react-core';
 import { Link } from 'react-router-dom';
 import { HelpIcon, AngleLeftIcon, AngleRightIcon, ArrowRightIcon } from '@patternfly/react-icons';
@@ -48,6 +49,52 @@ const findMatchedColdStart = (
     (c: HardwareConfiguration) => hwConfig.startsWith(c.gpu_type) || c.gpu_type === hwType,
   );
   return match?.cold_start_time_to_load_seconds;
+};
+
+type TruncatedDescriptionProps = {
+  content: string;
+  maxLines: number;
+  'data-testid'?: string;
+};
+
+const TruncatedDescription: React.FC<TruncatedDescriptionProps> = ({
+  content,
+  maxLines,
+  ...props
+}) => {
+  const outerRef = React.useRef<HTMLSpanElement>(null);
+  const innerRef = React.useRef<HTMLSpanElement>(null);
+  const [isTruncated, setIsTruncated] = React.useState(false);
+
+  const updateTruncation = React.useCallback(() => {
+    if (innerRef.current && outerRef.current) {
+      setIsTruncated(innerRef.current.offsetHeight > outerRef.current.offsetHeight);
+    }
+  }, []);
+
+  const truncateBody = (
+    <span
+      style={{
+        display: '-webkit-box',
+        WebkitBoxOrient: 'vertical',
+        overflowWrap: 'anywhere',
+        overflow: 'hidden',
+        WebkitLineClamp: maxLines,
+      }}
+      ref={outerRef}
+      onMouseEnter={updateTruncation}
+      onFocus={updateTruncation}
+      data-testid={props['data-testid']}
+    >
+      <span ref={innerRef}>{content}</span>
+    </span>
+  );
+
+  return (
+    <Tooltip hidden={!isTruncated || undefined} content={content} position="left" enableFlip>
+      {truncateBody}
+    </Tooltip>
+  );
 };
 
 type ModelCatalogCardBodyProps = {
@@ -140,7 +187,7 @@ const ModelCatalogCardBody: React.FC<ModelCatalogCardBodyProps> = ({
   // On error, fall back to showing description
   if (performanceArtifactsError && isValidated) {
     return (
-      <TruncatedText
+      <TruncatedDescription
         content={model.description || ''}
         maxLines={4}
         data-testid="model-catalog-card-description"
@@ -154,7 +201,7 @@ const ModelCatalogCardBody: React.FC<ModelCatalogCardBodyProps> = ({
       return (
         <Stack hasGutter>
           <StackItem>
-            <TruncatedText
+            <TruncatedDescription
               content={model.description || ''}
               maxLines={4}
               data-testid="model-catalog-card-description"
@@ -196,7 +243,7 @@ const ModelCatalogCardBody: React.FC<ModelCatalogCardBodyProps> = ({
     // If no valid metrics, fall back to showing description
     if (!metrics) {
       return (
-        <TruncatedText
+        <TruncatedDescription
           content={model.description || ''}
           maxLines={4}
           data-testid="model-catalog-card-description"
@@ -342,7 +389,7 @@ const ModelCatalogCardBody: React.FC<ModelCatalogCardBodyProps> = ({
 
   // Standard card body for non-validated models
   return (
-    <TruncatedText
+    <TruncatedDescription
       content={model.description || ''}
       maxLines={4}
       data-testid="model-catalog-card-description"
