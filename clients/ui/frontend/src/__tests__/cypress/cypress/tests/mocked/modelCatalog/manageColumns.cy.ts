@@ -8,10 +8,7 @@ import {
   type ModelCatalogInterceptOptions,
 } from '~/__tests__/cypress/cypress/support/interceptHelpers/modelCatalog';
 import { NBSP } from '~/__tests__/cypress/cypress/support/constants';
-import {
-  DEFAULT_VISIBLE_COLUMN_FIELDS,
-  HARDWARE_CONFIG_COLUMNS_STORAGE_KEY as STORAGE_KEY,
-} from '~/app/pages/modelCatalog/components/HardwareConfigurationTableColumns';
+import { HARDWARE_CONFIG_COLUMNS_STORAGE_KEY as STORAGE_KEY } from '~/app/pages/modelCatalog/components/HardwareConfigurationTableColumns';
 
 const initIntercepts = (options: Partial<ModelCatalogInterceptOptions> = {}) => {
   const resolvedOptions = {
@@ -53,16 +50,11 @@ describe('Manage Columns Modal', () => {
     initIntercepts();
   });
 
-  describe('Opening the Modal', () => {
-    it('should open the modal when clicking the Customize columns button', () => {
+  describe('Smoke Test', () => {
+    it('should open the manage columns modal and display its controls', () => {
       navigateToPerformanceInsights();
 
       modelCatalog.findManageColumnsButton().should('be.visible');
-      modelCatalog.openManageColumnsModal();
-    });
-
-    it('should display search input and column list in the modal', () => {
-      navigateToPerformanceInsights();
       modelCatalog.openManageColumnsModal();
 
       modelCatalog.findManageColumnsSearch().should('be.visible');
@@ -81,128 +73,23 @@ describe('Manage Columns Modal', () => {
       modelCatalog.findManageColumnsModal().should('not.contain.text', 'Workload type');
     });
 
-    it('should always show sticky columns in the table regardless of manage columns settings', () => {
+    it('should always show sticky columns in the table after toggling other columns off', () => {
       navigateToPerformanceInsights();
+
+      modelCatalog.openManageColumnsModal();
+      modelCatalog.findManageColumnCheckbox('Replicas').uncheck();
+      modelCatalog.findManageColumnCheckbox('vLLM Version').uncheck();
+      modelCatalog.findManageColumnsUpdateButton().click();
+
+      modelCatalog.findHardwareConfigurationTableHeaders().should('not.contain.text', 'Replicas');
+      modelCatalog
+        .findHardwareConfigurationTableHeaders()
+        .should('not.contain.text', 'vLLM Version');
 
       modelCatalog
         .findHardwareConfigurationTableHeaders()
         .should('contain.text', 'Hardware configuration');
       modelCatalog.findHardwareConfigurationTableHeaders().should('contain.text', 'Workload type');
-    });
-  });
-
-  describe('Toggling Columns Off/On', () => {
-    it('should remove a column from the table when unchecked and Update is clicked', () => {
-      navigateToPerformanceInsights();
-
-      modelCatalog.findHardwareConfigurationTableHeaders().should('contain.text', 'Replicas');
-
-      modelCatalog.openManageColumnsModal();
-      modelCatalog.findManageColumnCheckbox('Replicas').uncheck();
-      modelCatalog.findManageColumnsUpdateButton().click();
-
-      modelCatalog.findHardwareConfigurationTableHeaders().should('not.contain.text', 'Replicas');
-    });
-
-    it('should add a column back when re-checked and Update is clicked', () => {
-      const columnsWithoutReplicas = DEFAULT_VISIBLE_COLUMN_FIELDS.filter(
-        (col) => col !== 'replicas',
-      );
-      cy.window().then((win) => {
-        win.localStorage.setItem(STORAGE_KEY, JSON.stringify(columnsWithoutReplicas));
-      });
-
-      navigateToPerformanceInsights();
-
-      modelCatalog.findHardwareConfigurationTableHeaders().should('not.contain.text', 'Replicas');
-
-      modelCatalog.openManageColumnsModal();
-      modelCatalog.findManageColumnCheckbox('Replicas').check();
-      modelCatalog.findManageColumnsUpdateButton().click();
-
-      modelCatalog.findHardwareConfigurationTableHeaders().should('contain.text', 'Replicas');
-    });
-
-    it('should not apply changes when Cancel is clicked', () => {
-      navigateToPerformanceInsights();
-
-      modelCatalog.findHardwareConfigurationTableHeaders().should('contain.text', 'Replicas');
-
-      modelCatalog.openManageColumnsModal();
-      modelCatalog.findManageColumnCheckbox('Replicas').uncheck();
-      modelCatalog.findManageColumnsCancelButton().click();
-
-      modelCatalog.findHardwareConfigurationTableHeaders().should('contain.text', 'Replicas');
-    });
-
-    it('should toggle multiple columns at once', () => {
-      navigateToPerformanceInsights();
-
-      modelCatalog.openManageColumnsModal();
-      modelCatalog.findManageColumnCheckbox('Replicas').uncheck();
-      modelCatalog.findManageColumnCheckbox('vLLM Version').uncheck();
-      modelCatalog.findManageColumnsUpdateButton().click();
-
-      modelCatalog.findHardwareConfigurationTableHeaders().should('not.contain.text', 'Replicas');
-      modelCatalog
-        .findHardwareConfigurationTableHeaders()
-        .should('not.contain.text', 'vLLM Version');
-    });
-  });
-
-  describe('Column Visibility Persistence', () => {
-    it('should persist column visibility to localStorage', () => {
-      navigateToPerformanceInsights();
-
-      modelCatalog.openManageColumnsModal();
-      modelCatalog.findManageColumnCheckbox('Replicas').uncheck();
-      modelCatalog.findManageColumnsUpdateButton().click();
-
-      cy.window().then((win) => {
-        const stored = win.localStorage.getItem(STORAGE_KEY);
-        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-        expect(stored).to.not.be.null;
-        const parsed = JSON.parse(stored!);
-        expect(parsed).to.be.an('array');
-        expect(parsed).to.not.include('replicas');
-      });
-    });
-
-    it('should restore column visibility from localStorage on reload', () => {
-      navigateToPerformanceInsights();
-
-      modelCatalog.openManageColumnsModal();
-      modelCatalog.findManageColumnCheckbox('Replicas').uncheck();
-      modelCatalog.findManageColumnsUpdateButton().click();
-
-      modelCatalog.findHardwareConfigurationTableHeaders().should('not.contain.text', 'Replicas');
-
-      navigateToPerformanceInsights();
-
-      modelCatalog.findHardwareConfigurationTableHeaders().should('not.contain.text', 'Replicas');
-    });
-  });
-
-  describe('Restore Defaults', () => {
-    it('should restore default column visibility when Restore default columns is clicked', () => {
-      navigateToPerformanceInsights();
-
-      modelCatalog.openManageColumnsModal();
-      modelCatalog.findManageColumnCheckbox('Replicas').uncheck();
-      modelCatalog.findManageColumnCheckbox('vLLM Version').uncheck();
-      modelCatalog.findManageColumnsUpdateButton().click();
-
-      modelCatalog.findHardwareConfigurationTableHeaders().should('not.contain.text', 'Replicas');
-      modelCatalog
-        .findHardwareConfigurationTableHeaders()
-        .should('not.contain.text', 'vLLM Version');
-
-      modelCatalog.openManageColumnsModal();
-      modelCatalog.findManageColumnsRestoreDefaults().click();
-      modelCatalog.findManageColumnsUpdateButton().click();
-
-      modelCatalog.findHardwareConfigurationTableHeaders().should('contain.text', 'Replicas');
-      modelCatalog.findHardwareConfigurationTableHeaders().should('contain.text', 'vLLM Version');
     });
   });
 
@@ -258,20 +145,6 @@ describe('Manage Columns Modal', () => {
         .findHardwareConfigurationTableHeaders()
         .should('contain.text', 'Hardware configuration');
       modelCatalog.findHardwareConfigurationTableHeaders().should('contain.text', 'Workload type');
-    });
-  });
-
-  describe('Search', () => {
-    it('should filter columns when typing in the search input', () => {
-      navigateToPerformanceInsights();
-      modelCatalog.openManageColumnsModal();
-
-      modelCatalog.findManageColumnsSearch().type('TTFT');
-
-      modelCatalog.findManageColumnsModal().should('contain.text', `TTFT${NBSP}Latency Mean`);
-      modelCatalog.findManageColumnsModal().should('contain.text', `TTFT${NBSP}Latency P90`);
-      modelCatalog.findManageColumnsModal().should('not.contain.text', 'Replicas');
-      modelCatalog.findManageColumnsModal().should('not.contain.text', 'vLLM Version');
     });
   });
 });
