@@ -272,9 +272,8 @@ const ModelCatalogCardBody: React.FC<ModelCatalogCardBodyProps> = ({
                     bodyContent={
                       <div>
                         <p>
-                          <strong>Cold start latency:</strong> The estimated time required to
-                          provision hardware resources and initialize the container before the model
-                          can accept traffic.
+                          <strong>Cold start latency:</strong> The time it takes for vLLM to load
+                          the model. This does not include the time it takes to download the model.
                         </p>
                       </div>
                     }
