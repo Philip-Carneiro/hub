@@ -36,6 +36,7 @@ import {
   getDefaultFiltersFromNamedQuery,
 } from '~/app/pages/modelCatalog/utils/performanceFilterUtils';
 import { getEffectiveSortBy } from '~/app/pages/modelCatalog/utils/modelCatalogUtils';
+import useEmptyCategoryTracking from '~/app/hooks/useEmptyCategoryTracking';
 import { BFF_API_VERSION, URL_PREFIX } from '~/app/utilities/const';
 
 const MODEL_CATALOG_HOST_PATH = `${URL_PREFIX}/api/${BFF_API_VERSION}/model_catalog`;
