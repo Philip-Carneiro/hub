@@ -11,9 +11,8 @@ import {
   HelperTextItem,
 } from '@patternfly/react-core';
 import { OpenDrawerRightIcon } from '@patternfly/react-icons';
-import { UpdateObjectAtPropAndValue } from 'mod-arch-shared';
+import { UpdateObjectAtPropAndValue, FormFieldset } from 'mod-arch-shared';
 import { useThemeContext } from 'mod-arch-kubeflow';
-import FormFieldset from '~/app/pages/modelRegistry/screens/components/FormFieldset';
 import FormSection from '~/app/pages/modelRegistry/components/pf-overrides/FormSection';
 import { ManageSourceFormData } from '~/app/pages/modelCatalogSettings/useManageSourceData';
 import { validateYamlContent } from '~/app/pages/modelCatalogSettings/utils/validation';
@@ -152,7 +151,7 @@ const YamlSection: React.FC<YamlSectionProps> = ({
         isRequired
         fieldId="yaml-content"
       >
-        <FormFieldset component={yamlInput} field="YAML" />
+        {isMUITheme ? <FormFieldset component={yamlInput} field="YAML" /> : yamlInput}
         {yamlHelperTxtNode}
       </FormGroup>
     </FormSection>

@@ -7,8 +7,12 @@ import {
   TextInput,
 } from '@patternfly/react-core';
 import React from 'react';
-import { UpdateObjectAtPropAndValue } from 'mod-arch-shared';
-import FormFieldset from '~/app/pages/modelRegistry/screens/components/FormFieldset';
+import {
+  UpdateObjectAtPropAndValue,
+  FormFieldset,
+  ThemeAwareFormGroupWrapper,
+} from 'mod-arch-shared';
+import { useThemeContext } from 'mod-arch-kubeflow';
 import FormSection from '~/app/pages/modelRegistry/components/pf-overrides/FormSection';
 import { MR_CHARACTER_LIMIT } from './const';
 import RegisterModelTypeField from './RegisterModelTypeField';
@@ -32,6 +36,8 @@ const RegisterModelDetailsFormSection = <D extends RegisterModelFormData>({
   isModelTypeRequired = false,
   isModelTypeReadOnly = false,
 }: RegisterModelDetailsFormSectionProp<D>): React.ReactNode => {
+  const { isMUITheme } = useThemeContext();
+
   const modelNameInput = (
     <TextInput
       isRequired
@@ -55,32 +61,47 @@ const RegisterModelDetailsFormSection = <D extends RegisterModelFormData>({
     />
   );
 
+  const modelNameHelperTextNode = hasModelNameError ? (
+    <FormHelperText>
+      <HelperText>
+        <HelperTextItem variant="error" data-testid="model-name-error">
+          {isModelNameDuplicate
+            ? 'Model name already exists'
+            : `Cannot exceed ${MR_CHARACTER_LIMIT} characters`}
+        </HelperTextItem>
+      </HelperText>
+    </FormHelperText>
+  ) : undefined;
+
+  const modelDescriptionHelperTextNode = (
+    <FormHelperText>
+      <HelperText>
+        <HelperTextItem>Enter a brief summary of the model&apos;s key details.</HelperTextItem>
+      </HelperText>
+    </FormHelperText>
+  );
+
   return (
     <FormSection
       title="Model details"
       description="Provide model details that apply to every version of this model."
     >
-      <FormGroup label="Model name" isRequired fieldId="model-name">
-        <FormFieldset component={modelNameInput} field="Model Name" />
-        {hasModelNameError && (
-          <FormHelperText>
-            <HelperText>
-              <HelperTextItem variant="error" data-testid="model-name-error">
-                {isModelNameDuplicate
-                  ? 'Model name already exists'
-                  : `Cannot exceed ${MR_CHARACTER_LIMIT} characters`}
-              </HelperTextItem>
-            </HelperText>
-          </FormHelperText>
-        )}
-      </FormGroup>
+      <ThemeAwareFormGroupWrapper
+        label="Model name"
+        fieldId="model-name"
+        isRequired
+        hasError={hasModelNameError}
+        helperTextNode={modelNameHelperTextNode}
+      >
+        {modelNameInput}
+      </ThemeAwareFormGroupWrapper>
       <FormGroup label="Model description" fieldId="model-description">
-        <FormFieldset component={modelDescriptionInput} field="Model Description" />
-        <FormHelperText>
-          <HelperText>
-            <HelperTextItem>Enter a brief summary of the model&apos;s key details.</HelperTextItem>
-          </HelperText>
-        </FormHelperText>
+        {isMUITheme ? (
+          <FormFieldset component={modelDescriptionInput} field="Model Description" />
+        ) : (
+          modelDescriptionInput
+        )}
+        {modelDescriptionHelperTextNode}
       </FormGroup>
       <RegisterModelTypeField
         modelCustomProperties={formData.modelCustomProperties}

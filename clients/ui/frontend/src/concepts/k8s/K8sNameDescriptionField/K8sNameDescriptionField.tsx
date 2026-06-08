@@ -7,8 +7,9 @@ import {
   TextArea,
   TextInput,
 } from '@patternfly/react-core';
+import { FormFieldset, ThemeAwareFormGroupWrapper } from 'mod-arch-shared';
+import { useThemeContext } from 'mod-arch-kubeflow';
 import ResourceNameDefinitionTooltip from '~/concepts/k8s/ResourceNameDefinitionTooltip';
-import FormFieldset from '~/app/pages/modelRegistry/screens/components/FormFieldset';
 import {
   K8sNameDescriptionFieldData,
   K8sNameDescriptionFieldUpdateFunction,
@@ -56,6 +57,7 @@ const K8sNameDescriptionField: React.FC<K8sNameDescriptionFieldProps> = ({
   nameHelperText,
   hideDescription,
 }) => {
+  const { isMUITheme } = useThemeContext();
   const [showK8sField, setShowK8sField] = React.useState(false);
 
   const { name, description, k8sName } = data;
@@ -86,36 +88,43 @@ const K8sNameDescriptionField: React.FC<K8sNameDescriptionFieldProps> = ({
     />
   );
 
+  const nameHelperTextNode =
+    nameHelperText || (!showK8sField && !k8sName.state.immutable) ? (
+      <HelperText>
+        {nameHelperText && <HelperTextItem>{nameHelperText}</HelperTextItem>}
+        {!showK8sField && !k8sName.state.immutable && (
+          <>
+            {k8sName.value && (
+              <HelperTextItem>
+                The resource name will be <b>{k8sName.value}</b>.
+              </HelperTextItem>
+            )}
+            <HelperTextItem>
+              <Button
+                data-testid={`${dataTestId}-editResourceLink`}
+                variant="link"
+                isInline
+                onClick={() => setShowK8sField(true)}
+              >
+                Edit resource name
+              </Button>{' '}
+              <ResourceNameDefinitionTooltip />
+            </HelperTextItem>
+          </>
+        )}
+      </HelperText>
+    ) : null;
+
   return (
     <>
-      <FormGroup label={nameLabel} isRequired fieldId={`${dataTestId}-name`}>
-        <FormFieldset component={nameInput} field="Name" />
-        {nameHelperText || (!showK8sField && !k8sName.state.immutable) ? (
-          <HelperText>
-            {nameHelperText && <HelperTextItem>{nameHelperText}</HelperTextItem>}
-            {!showK8sField && !k8sName.state.immutable && (
-              <>
-                {k8sName.value && (
-                  <HelperTextItem>
-                    The resource name will be <b>{k8sName.value}</b>.
-                  </HelperTextItem>
-                )}
-                <HelperTextItem>
-                  <Button
-                    data-testid={`${dataTestId}-editResourceLink`}
-                    variant="link"
-                    isInline
-                    onClick={() => setShowK8sField(true)}
-                  >
-                    Edit resource name
-                  </Button>{' '}
-                  <ResourceNameDefinitionTooltip />
-                </HelperTextItem>
-              </>
-            )}
-          </HelperText>
-        ) : null}
-      </FormGroup>
+      <ThemeAwareFormGroupWrapper
+        label={nameLabel}
+        fieldId={`${dataTestId}-name`}
+        isRequired
+        helperTextNode={nameHelperTextNode}
+      >
+        {nameInput}
+      </ThemeAwareFormGroupWrapper>
 
       <ResourceNameField
         allowEdit={showK8sField}
@@ -126,7 +135,11 @@ const K8sNameDescriptionField: React.FC<K8sNameDescriptionFieldProps> = ({
 
       {!hideDescription && (
         <FormGroup label={descriptionLabel} fieldId={`${dataTestId}-description`}>
-          <FormFieldset component={descriptionTextArea} field="Description" />
+          {isMUITheme ? (
+            <FormFieldset component={descriptionTextArea} field="Description" />
+          ) : (
+            descriptionTextArea
+          )}
         </FormGroup>
       )}
     </>
