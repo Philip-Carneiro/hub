@@ -179,7 +179,7 @@ const HardwareConfigurationFilterToolbar: React.FC<HardwareConfigurationFilterTo
             >
               <Button
                 variant="plain"
-                aria-label="More info for cold start latency"
+                aria-label="More info for cold start load time"
                 className="pf-v6-u-p-xs"
                 icon={<HelpIcon />}
               />

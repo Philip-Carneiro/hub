@@ -358,7 +358,7 @@ export const hardwareConfigColumns: HardwareConfigColumn[] = [
   },
   {
     field: 'cold_start_load_time',
-    label: `Cold start\nlatency`,
+    label: `Cold start load time`,
     info: {
       popover:
         'The time it takes for vLLM to load the model. This does not include the time it takes to download the model.',
@@ -368,7 +368,6 @@ export const hardwareConfigColumns: HardwareConfigColumn[] = [
     },
     sortable: false,
     width: 20,
-    modifier: 'wrap',
   },
   {
     field: 'runtime_command',
