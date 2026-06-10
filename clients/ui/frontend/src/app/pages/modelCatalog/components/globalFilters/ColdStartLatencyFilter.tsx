@@ -39,7 +39,7 @@ const ColdStartLatencyFilter: React.FC = () => {
     if (hasActiveFilter) {
       return (
         <>
-          <strong>Cold start load time:</strong> {filterValue} ms
+          <strong>Cold start load time:</strong> ≤ {filterValue} ms
         </>
       );
     }
