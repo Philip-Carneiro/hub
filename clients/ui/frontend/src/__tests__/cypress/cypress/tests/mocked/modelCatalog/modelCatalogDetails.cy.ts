@@ -287,6 +287,7 @@ describe('Model Catalog Details Page - Edge Cases', () => {
     modelCatalog.findRegisterModelButton().should('have.attr', 'aria-disabled', 'true');
     modelCatalog.findRegisterModelButton().trigger('mouseenter');
     modelCatalog.findRegisterCatalogModelTooltip().should('be.visible');
+    cy.testA11y({ exclude: ['.pf-v6-c-tooltip'] });
   });
 
   it('should show error alert when artifacts fail to load', () => {
