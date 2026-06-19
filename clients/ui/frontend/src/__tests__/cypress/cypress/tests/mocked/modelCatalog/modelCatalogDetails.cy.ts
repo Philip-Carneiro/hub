@@ -284,6 +284,7 @@ describe('Model Catalog Details Page - Edge Cases', () => {
     modelCatalog.findModelCatalogDetailLink().first().click();
     modelCatalog.findBreadcrumb().should('exist');
 
+    cy.wait('@getEmptyModelRegistries');
     modelCatalog.findRegisterModelButton().should('have.attr', 'aria-disabled', 'true');
     modelCatalog.findRegisterModelButton().trigger('mouseenter');
     modelCatalog.findRegisterCatalogModelTooltip().should('be.visible');
