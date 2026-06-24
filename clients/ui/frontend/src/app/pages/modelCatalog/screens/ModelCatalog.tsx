@@ -20,6 +20,7 @@ const ModelCatalog: React.FC = () => {
     catalogLabels,
     catalogSourcesLoaded,
     emptyCategoryLabels,
+    setCategoryCount,
   } = React.useContext(ModelCatalogContext);
   const filtersApplied = useHasVisibleFiltersApplied();
 
@@ -56,6 +57,7 @@ const ModelCatalog: React.FC = () => {
         onSelectSourceLabel={setSelectedSourceLabel}
         isAllItemsView={isAllModelsView}
         emptyCategoryLabels={emptyCategoryLabels}
+        setCategoryCount={setCategoryCount}
         renderEmptyCategoriesState={() => (
           <EmptyCatalogState
             testid="empty-model-catalog-no-categories"

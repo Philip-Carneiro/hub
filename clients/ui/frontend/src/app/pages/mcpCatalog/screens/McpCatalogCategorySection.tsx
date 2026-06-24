@@ -51,6 +51,7 @@ const McpCatalogCategorySection: React.FC<McpCatalogCategorySectionProps> = ({
     mcpServersLoaded,
     mcpServers.items.length,
     searchTerm,
+    mcpServersLoadError,
   );
 
   if (mcpServersLoaded && mcpServers.items.length === 0 && !searchTerm) {

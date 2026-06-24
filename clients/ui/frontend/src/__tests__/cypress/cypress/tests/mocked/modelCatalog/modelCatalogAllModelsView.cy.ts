@@ -225,9 +225,9 @@ describe('Model Catalog All Models View', () => {
 
       modelCatalog.visit();
 
-      modelCatalog.findCategoryToggle('label-OpenVINO').should('not.exist');
       modelCatalog.findCategoryToggle('label-Hugging Face').should('be.visible');
       modelCatalog.findCategoryToggle('label-Community').should('be.visible');
+      modelCatalog.findCategoryToggle('label-OpenVINO').should('not.exist');
     });
   });
 });

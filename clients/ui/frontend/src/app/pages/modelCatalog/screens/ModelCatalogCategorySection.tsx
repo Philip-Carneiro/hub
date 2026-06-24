@@ -44,6 +44,7 @@ const ModelCatalogCategorySection: React.FC<CategorySectionProps> = ({
     catalogModelsLoaded,
     catalogModels.items.length,
     searchTerm,
+    catalogModelsLoadError,
   );
 
   if (catalogModelsLoaded && catalogModels.items.length === 0 && !searchTerm) {

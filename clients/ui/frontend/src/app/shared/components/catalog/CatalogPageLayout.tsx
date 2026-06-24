@@ -12,6 +12,7 @@ type CatalogPageLayoutProps = {
   onSelectSourceLabel: (label: string) => void;
   isAllItemsView: boolean;
   emptyCategoryLabels?: Set<string>;
+  setCategoryCount?: (count: number) => void;
   renderEmptyCategoriesState: () => React.ReactNode;
   renderFilterSidebar: () => React.ReactNode;
   renderToolbar: () => React.ReactNode;
@@ -30,6 +31,7 @@ const CatalogPageLayout: React.FC<CatalogPageLayoutProps> = ({
   onSelectSourceLabel,
   isAllItemsView,
   emptyCategoryLabels,
+  setCategoryCount,
   renderEmptyCategoriesState,
   renderFilterSidebar,
   renderToolbar,
@@ -48,6 +50,12 @@ const CatalogPageLayout: React.FC<CatalogPageLayoutProps> = ({
         : activeCategories,
     [activeCategories, emptyCategoryLabels],
   );
+
+  React.useEffect(() => {
+    if (catalogSourcesLoaded && setCategoryCount) {
+      setCategoryCount(activeCategories.length);
+    }
+  }, [catalogSourcesLoaded, activeCategories.length, setCategoryCount]);
 
   const isSingleCategory = effectiveCategories.length === 1;
   const hasNoCategories = effectiveCategories.length === 0;

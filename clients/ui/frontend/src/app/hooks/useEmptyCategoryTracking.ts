@@ -1,17 +1,37 @@
 import * as React from 'react';
 
+const EMPTY_SET = new Set<string>();
+
 type UseEmptyCategoryTrackingResult = {
   emptyCategoryLabels: Set<string>;
   reportCategoryEmpty: (label: string, isEmpty: boolean) => void;
+  setCategoryCount: (count: number) => void;
 };
 
 const useEmptyCategoryTracking = (): UseEmptyCategoryTrackingResult => {
-  const [emptyCategoryLabels, setEmptyCategoryLabels] = React.useState<Set<string>>(
-    () => new Set<string>(),
-  );
+  const [rawEmptyLabels, setRawEmptyLabels] = React.useState<Set<string>>(() => new Set<string>());
+  const [reportedLabels, setReportedLabels] = React.useState<Set<string>>(() => new Set<string>());
+  const [categoryCount, setCategoryCount] = React.useState<number | null>(null);
+
+  const categoriesResolved =
+    categoryCount !== null && (categoryCount === 0 || reportedLabels.size >= categoryCount);
+
+  // Hold back empty labels until all categories have reported.
+  // Since reportCategoryEmpty updates both sets in the same startTransition,
+  // rawEmptyLabels is fully populated when categoriesResolved flips to true.
+  const emptyCategoryLabels = categoriesResolved ? rawEmptyLabels : EMPTY_SET;
 
   const reportCategoryEmpty = React.useCallback((label: string, isEmpty: boolean) => {
-    setEmptyCategoryLabels((prev) => {
+    setReportedLabels((prev) => {
+      if (prev.has(label)) {
+        return prev;
+      }
+      const next = new Set(prev);
+      next.add(label);
+      return next;
+    });
+
+    setRawEmptyLabels((prev) => {
       const hasLabel = prev.has(label);
       if (isEmpty && !hasLabel) {
         const next = new Set(prev);
@@ -27,7 +47,7 @@ const useEmptyCategoryTracking = (): UseEmptyCategoryTrackingResult => {
     });
   }, []);
 
-  return { emptyCategoryLabels, reportCategoryEmpty };
+  return { emptyCategoryLabels, reportCategoryEmpty, setCategoryCount };
 };
 
 export default useEmptyCategoryTracking;

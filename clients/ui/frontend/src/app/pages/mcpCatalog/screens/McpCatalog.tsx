@@ -22,6 +22,7 @@ const McpCatalog: React.FC = () => {
     catalogLabels,
     catalogSourcesLoaded,
     emptyCategoryLabels,
+    setCategoryCount,
   } = React.useContext(McpCatalogContext);
 
   const filtersApplied = hasMcpFiltersApplied(filters, searchQuery);
@@ -58,6 +59,7 @@ const McpCatalog: React.FC = () => {
         onSelectSourceLabel={setSelectedSourceLabel}
         isAllItemsView={isAllServersView}
         emptyCategoryLabels={emptyCategoryLabels}
+        setCategoryCount={setCategoryCount}
         renderEmptyCategoriesState={() => (
           <EmptyCatalogState
             testid="empty-mcp-catalog-no-categories"

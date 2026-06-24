@@ -178,7 +178,9 @@ describe('MCP Catalog Empty Category Hiding', () => {
 
     mcpCatalog.visit();
 
-    cy.findByTestId('mcp-category-title-organization_mcp_servers').should('be.visible');
+    // With only 1 effective category (community is empty), the page auto-selects
+    // into gallery view where the title renders via CatalogGalleryLayout
+    cy.findByTestId('single-category-header').should('be.visible');
     cy.findByTestId('mcp-category-title-community_mcp_servers').should('not.exist');
   });
 });

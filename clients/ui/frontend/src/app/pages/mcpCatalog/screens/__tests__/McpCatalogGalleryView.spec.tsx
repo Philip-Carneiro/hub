@@ -51,6 +51,7 @@ const defaultContext: McpCatalogContextType = {
   filterOptionsLoadError: undefined,
   emptyCategoryLabels: new Set<string>(),
   reportCategoryEmpty: jest.fn(),
+  setCategoryCount: jest.fn(),
 };
 
 const defaultHookResult: McpServersResult = {

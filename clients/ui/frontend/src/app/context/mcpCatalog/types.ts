@@ -27,6 +27,7 @@ export type McpCatalogExtension = {
   mcpApiState: ModelCatalogAPIState;
   emptyCategoryLabels: Set<string>;
   reportCategoryEmpty: (label: string, isEmpty: boolean) => void;
+  setCategoryCount: (count: number) => void;
 };
 
 export type McpCatalogContextType = CatalogContextValue<McpCatalogFilterOptionsList> &

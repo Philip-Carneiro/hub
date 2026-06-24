@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { startTransition, useEffect } from 'react';
 
 const useReportCategoryEmpty = (
   reportCategoryEmpty: (label: string, isEmpty: boolean) => void,
@@ -6,16 +6,19 @@ const useReportCategoryEmpty = (
   isLoaded: boolean,
   itemCount: number,
   searchTerm: string,
+  loadError?: Error | undefined,
 ): void => {
-  React.useEffect(() => {
-    if (!isLoaded || searchTerm) {
-      return undefined;
+  useEffect(() => {
+    if (searchTerm) {
+      return;
     }
-    const timer = setTimeout(() => {
+    if (!isLoaded && !loadError) {
+      return;
+    }
+    startTransition(() => {
       reportCategoryEmpty(label, itemCount === 0);
-    }, 100);
-    return () => clearTimeout(timer);
-  }, [isLoaded, itemCount, label, searchTerm, reportCategoryEmpty]);
+    });
+  }, [isLoaded, itemCount, label, searchTerm, reportCategoryEmpty, loadError]);
 };
 
 export default useReportCategoryEmpty;

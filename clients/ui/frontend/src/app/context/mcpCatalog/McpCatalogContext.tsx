@@ -60,7 +60,7 @@ function useMcpCatalogSetup(providerState: CatalogProviderState) {
     React.useState<McpCatalogPaginationState>(defaultPagination);
 
   const { setSelectedSourceLabel } = providerState;
-  const { emptyCategoryLabels, reportCategoryEmpty } = useEmptyCategoryTracking();
+  const { emptyCategoryLabels, reportCategoryEmpty, setCategoryCount } = useEmptyCategoryTracking();
 
   React.useEffect(() => {
     setSelectedSourceLabel(initialState.selectedSourceLabel);
@@ -133,6 +133,7 @@ function useMcpCatalogSetup(providerState: CatalogProviderState) {
       mcpApiState: apiStateMcpCatalog,
       emptyCategoryLabels,
       reportCategoryEmpty,
+      setCategoryCount,
     }),
     [
       apiStateMcpCatalog,
@@ -146,6 +147,7 @@ function useMcpCatalogSetup(providerState: CatalogProviderState) {
       clearAllFilters,
       emptyCategoryLabels,
       reportCategoryEmpty,
+      setCategoryCount,
     ],
   );
 
