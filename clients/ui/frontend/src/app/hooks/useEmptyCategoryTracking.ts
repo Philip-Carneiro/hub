@@ -19,7 +19,8 @@ const useEmptyCategoryTracking = (): UseEmptyCategoryTrackingResult => {
   // Hold back empty labels until all categories have reported.
   // Since reportCategoryEmpty updates both sets in the same startTransition,
   // rawEmptyLabels is fully populated when categoriesResolved flips to true.
-  const emptyCategoryLabels = categoriesResolved ? rawEmptyLabels : EMPTY_SET;
+  const emptyCategoryLabels =
+    categoriesResolved && rawEmptyLabels.size > 0 ? rawEmptyLabels : EMPTY_SET;
 
   const reportCategoryEmpty = React.useCallback((label: string, isEmpty: boolean) => {
     setReportedLabels((prev) => {
