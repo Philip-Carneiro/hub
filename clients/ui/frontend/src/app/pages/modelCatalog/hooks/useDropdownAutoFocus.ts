@@ -35,7 +35,10 @@ const useDropdownAutoFocus = (isOpen: boolean): React.RefObject<HTMLDivElement> 
       if (e.key === 'Escape') {
         return;
       }
-      const target = e.target as HTMLElement;
+      const target = e.target instanceof HTMLElement ? e.target : null;
+      if (!target) {
+        return;
+      }
 
       // Focus trap: cycle Tab within the panel instead of leaving it
       if (e.key === 'Tab' && contentRef.current?.contains(target)) {
