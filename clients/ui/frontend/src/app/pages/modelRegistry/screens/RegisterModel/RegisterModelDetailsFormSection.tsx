@@ -7,13 +7,9 @@ import {
   TextInput,
 } from '@patternfly/react-core';
 import React from 'react';
-import {
-  UpdateObjectAtPropAndValue,
-  FormFieldset,
-  ThemeAwareFormGroupWrapper,
-} from 'mod-arch-shared';
-import { useThemeContext } from 'mod-arch-kubeflow';
+import { UpdateObjectAtPropAndValue, ThemeAwareFormGroupWrapper } from 'mod-arch-shared';
 import FormSection from '~/app/pages/modelRegistry/components/pf-overrides/FormSection';
+import ThemeAwareFieldset from '~/app/pages/modelRegistry/screens/components/ThemeAwareFieldset';
 import { MR_CHARACTER_LIMIT } from './const';
 import RegisterModelTypeField from './RegisterModelTypeField';
 import { RegisterModelFormData } from './useRegisterModelData';
@@ -36,8 +32,6 @@ const RegisterModelDetailsFormSection = <D extends RegisterModelFormData>({
   isModelTypeRequired = false,
   isModelTypeReadOnly = false,
 }: RegisterModelDetailsFormSectionProp<D>): React.ReactNode => {
-  const { isMUITheme } = useThemeContext();
-
   const modelNameInput = (
     <TextInput
       isRequired
@@ -96,11 +90,7 @@ const RegisterModelDetailsFormSection = <D extends RegisterModelFormData>({
         {modelNameInput}
       </ThemeAwareFormGroupWrapper>
       <FormGroup label="Model description" fieldId="model-description">
-        {isMUITheme ? (
-          <FormFieldset component={modelDescriptionInput} field="Model Description" />
-        ) : (
-          modelDescriptionInput
-        )}
+        <ThemeAwareFieldset field="Model Description">{modelDescriptionInput}</ThemeAwareFieldset>
         {modelDescriptionHelperTextNode}
       </FormGroup>
       <RegisterModelTypeField

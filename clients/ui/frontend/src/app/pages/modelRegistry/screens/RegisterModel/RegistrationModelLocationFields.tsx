@@ -1,5 +1,13 @@
 import React from 'react';
-import { TextInput, Radio, TextInputGroupMain, TextInputGroup } from '@patternfly/react-core';
+import {
+  TextInput,
+  Radio,
+  TextInputGroupMain,
+  TextInputGroup,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
+} from '@patternfly/react-core';
 import spacing from '@patternfly/react-styles/css/utilities/Spacing/spacing';
 import { UpdateObjectAtPropAndValue, ThemeAwareFormGroupWrapper } from 'mod-arch-shared';
 import PasswordInput from '~/app/shared/components/PasswordInput';
@@ -108,7 +116,13 @@ const RegistrationModelLocationFields = <D extends RegistrationCommonFormData>({
   );
 
   const pathHelperTextNode = (
-    <span>Enter a path to a model or folder. This path cannot point to a root folder.</span>
+    <FormHelperText>
+      <HelperText>
+        <HelperTextItem>
+          Enter a path to a model or folder. This path cannot point to a root folder.
+        </HelperTextItem>
+      </HelperText>
+    </FormHelperText>
   );
 
   return (

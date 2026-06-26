@@ -7,9 +7,9 @@ import {
   TextArea,
   TextInput,
 } from '@patternfly/react-core';
-import { FormFieldset, ThemeAwareFormGroupWrapper } from 'mod-arch-shared';
-import { useThemeContext } from 'mod-arch-kubeflow';
+import { ThemeAwareFormGroupWrapper } from 'mod-arch-shared';
 import ResourceNameDefinitionTooltip from '~/concepts/k8s/ResourceNameDefinitionTooltip';
+import ThemeAwareFieldset from '~/app/pages/modelRegistry/screens/components/ThemeAwareFieldset';
 import {
   K8sNameDescriptionFieldData,
   K8sNameDescriptionFieldUpdateFunction,
@@ -57,7 +57,6 @@ const K8sNameDescriptionField: React.FC<K8sNameDescriptionFieldProps> = ({
   nameHelperText,
   hideDescription,
 }) => {
-  const { isMUITheme } = useThemeContext();
   const [showK8sField, setShowK8sField] = React.useState(false);
 
   const { name, description, k8sName } = data;
@@ -135,11 +134,7 @@ const K8sNameDescriptionField: React.FC<K8sNameDescriptionFieldProps> = ({
 
       {!hideDescription && (
         <FormGroup label={descriptionLabel} fieldId={`${dataTestId}-description`}>
-          {isMUITheme ? (
-            <FormFieldset component={descriptionTextArea} field="Description" />
-          ) : (
-            descriptionTextArea
-          )}
+          <ThemeAwareFieldset field="Description">{descriptionTextArea}</ThemeAwareFieldset>
         </FormGroup>
       )}
     </>

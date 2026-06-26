@@ -11,15 +11,11 @@ import {
   ToggleGroupItem,
 } from '@patternfly/react-core';
 import spacing from '@patternfly/react-styles/css/utilities/Spacing/spacing';
-import {
-  UpdateObjectAtPropAndValue,
-  FormFieldset,
-  ThemeAwareFormGroupWrapper,
-} from 'mod-arch-shared';
-import { useThemeContext } from 'mod-arch-kubeflow';
+import { UpdateObjectAtPropAndValue, ThemeAwareFormGroupWrapper } from 'mod-arch-shared';
 import { ModelVersion } from '~/app/types';
 import FormSection from '~/app/pages/modelRegistry/components/pf-overrides/FormSection';
 import { RegistrationMode } from '~/app/pages/modelRegistry/screens/const';
+import ThemeAwareFieldset from '~/app/pages/modelRegistry/screens/components/ThemeAwareFieldset';
 import { ModelLocationType, RegistrationCommonFormData } from './useRegisterModelData';
 import RegistrationModelLocationFields from './RegistrationModelLocationFields';
 import RegisterAndStoreFields from './RegisterAndStoreFields';
@@ -51,7 +47,6 @@ const RegistrationCommonFormSections = <D extends RegistrationCommonFormData>({
   namespaceCannotCheck,
   registryName,
 }: RegistrationCommonFormSectionsProps<D>): React.ReactNode => {
-  const { isMUITheme } = useThemeContext();
   const isVersionNameValid = isNameValid(formData.versionName);
   const registrationMode = formData.registrationMode || RegistrationMode.Register;
 
@@ -159,11 +154,9 @@ const RegistrationCommonFormSections = <D extends RegistrationCommonFormData>({
           {versionNameInput}
         </ThemeAwareFormGroupWrapper>
         <FormGroup label="Version description" fieldId="version-description">
-          {isMUITheme ? (
-            <FormFieldset component={versionDescriptionInput} field="Version Description" />
-          ) : (
-            versionDescriptionInput
-          )}
+          <ThemeAwareFieldset field="Version Description">
+            {versionDescriptionInput}
+          </ThemeAwareFieldset>
         </FormGroup>
         <ThemeAwareFormGroupWrapper label="Source model format" fieldId="source-model-format">
           {sourceModelFormatInput}
