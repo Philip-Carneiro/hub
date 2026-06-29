@@ -9,7 +9,7 @@ const McpCatalogSettingsRoutes: React.FC = () => (
     <Routes>
       <Route path="/" element={<McpCatalogSettings />} />
       <Route path="add-source" element={<McpManageSourcePage />} />
-      <Route path="manage-source/:sourceId" element={<McpManageSourcePage />} />
+      <Route path="manage-source/:catalogSourceId" element={<McpManageSourcePage />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   </McpCatalogSettingsContextProvider>

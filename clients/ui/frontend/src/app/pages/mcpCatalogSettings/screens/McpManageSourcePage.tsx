@@ -12,10 +12,9 @@ import {
 } from '~/app/routes/mcpCatalogSettings/mcpCatalogSettings';
 
 const McpManageSourcePage: React.FC = () => {
-  const { sourceId } = useParams<{ sourceId?: string }>();
-  const isAddMode = !sourceId;
+  const { catalogSourceId } = useParams<{ catalogSourceId?: string }>();
+  const isAddMode = !catalogSourceId;
   const pageTitle = isAddMode ? MCP_ADD_SOURCE_TITLE : MCP_MANAGE_SOURCE_TITLE;
-  const breadcrumbLabel = isAddMode ? MCP_ADD_SOURCE_TITLE : MCP_MANAGE_SOURCE_TITLE;
   const description = isAddMode ? MCP_ADD_SOURCE_DESCRIPTION : MCP_MANAGE_SOURCE_DESCRIPTION;
 
   return (
@@ -26,7 +25,7 @@ const McpManageSourcePage: React.FC = () => {
             <Link to={mcpCatalogSettingsUrl()}>{MCP_CATALOG_SETTINGS_PAGE_TITLE}</Link>
           </BreadcrumbItem>
           <BreadcrumbItem data-testid="mcp-breadcrumb-source-action" isActive>
-            {breadcrumbLabel}
+            {pageTitle}
           </BreadcrumbItem>
         </Breadcrumb>
       }

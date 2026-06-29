@@ -1,5 +1,12 @@
 import * as React from 'react';
-import { Button, EmptyState, EmptyStateBody, EmptyStateVariant } from '@patternfly/react-core';
+import {
+  Button,
+  EmptyState,
+  EmptyStateActions,
+  EmptyStateBody,
+  EmptyStateFooter,
+  EmptyStateVariant,
+} from '@patternfly/react-core';
 import { PlusCircleIcon } from '@patternfly/react-icons';
 import { useNavigate } from 'react-router-dom';
 import { ApplicationsPage, ProjectObjectType, TitleWithIcon } from 'mod-arch-shared';
@@ -34,13 +41,17 @@ const McpCatalogSettings: React.FC = () => {
           <EmptyStateBody>
             No MCP sources have been configured. Add a source to get started.
           </EmptyStateBody>
-          <Button
-            variant="primary"
-            onClick={() => navigate(mcpAddSourceUrl())}
-            data-testid="mcp-add-source-button-empty"
-          >
-            {MCP_ADD_SOURCE_TITLE}
-          </Button>
+          <EmptyStateFooter>
+            <EmptyStateActions>
+              <Button
+                variant="primary"
+                onClick={() => navigate(mcpAddSourceUrl())}
+                data-testid="mcp-add-source-button-empty"
+              >
+                {MCP_ADD_SOURCE_TITLE}
+              </Button>
+            </EmptyStateActions>
+          </EmptyStateFooter>
         </EmptyState>
       }
       loaded

@@ -12,5 +12,5 @@ export const mcpCatalogSettingsUrl = (): string => '/mcp-catalog-settings';
 
 export const mcpAddSourceUrl = (): string => `${mcpCatalogSettingsUrl()}/add-source`;
 
-export const mcpManageSourceUrl = (sourceId: string): string =>
-  `${mcpCatalogSettingsUrl()}/manage-source/${encodeURIComponent(sourceId)}`;
+export const mcpManageSourceUrl = (catalogSourceId: string): string =>
+  `${mcpCatalogSettingsUrl()}/manage-source/${encodeURIComponent(catalogSourceId)}`;
