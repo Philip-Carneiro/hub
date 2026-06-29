@@ -82,6 +82,7 @@ type ModelCatalogExtension = {
   sortBy: ModelCatalogSortOption | null;
   setSortBy: (sortBy: ModelCatalogSortOption | null) => void;
   emptyCategoryLabels: Set<string>;
+  categoriesResolved: boolean;
   reportCategoryEmpty: (label: string, isEmpty: boolean) => void;
   setCategoryCount: (count: number) => void;
 };
@@ -108,7 +109,8 @@ function useModelCatalogSetup(providerState: CatalogProviderState) {
     React.useState(false);
   const [lastViewedModelName, setLastViewedModelName] = React.useState<string | null>(null);
   const [sortBy, setSortBy] = React.useState<ModelCatalogSortOption | null>(null);
-  const { emptyCategoryLabels, reportCategoryEmpty, setCategoryCount } = useEmptyCategoryTracking();
+  const { emptyCategoryLabels, categoriesResolved, reportCategoryEmpty, setCategoryCount } =
+    useEmptyCategoryTracking();
 
   const location = useLocation();
   const isOnDetailsPage = location.pathname.includes(ModelDetailsTab.PERFORMANCE_INSIGHTS);
@@ -298,6 +300,7 @@ function useModelCatalogSetup(providerState: CatalogProviderState) {
       sortBy,
       setSortBy,
       emptyCategoryLabels,
+      categoriesResolved,
       reportCategoryEmpty,
       setCategoryCount,
     }),
@@ -318,6 +321,7 @@ function useModelCatalogSetup(providerState: CatalogProviderState) {
       sortBy,
       setSortBy,
       emptyCategoryLabels,
+      categoriesResolved,
       reportCategoryEmpty,
       setCategoryCount,
     ],

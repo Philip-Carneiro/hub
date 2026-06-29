@@ -10,7 +10,12 @@ const ModelCatalogSourceLabelBlocks: React.FC = () => {
     setSelectedSourceLabel,
     selectedSourceLabel,
     emptyCategoryLabels,
+    categoriesResolved,
   } = React.useContext(ModelCatalogContext);
+
+  if (!categoriesResolved) {
+    return null;
+  }
 
   return (
     <CatalogSourceLabelToggle

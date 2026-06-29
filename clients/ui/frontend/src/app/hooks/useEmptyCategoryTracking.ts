@@ -4,6 +4,7 @@ const EMPTY_SET = new Set<string>();
 
 type UseEmptyCategoryTrackingResult = {
   emptyCategoryLabels: Set<string>;
+  categoriesResolved: boolean;
   reportCategoryEmpty: (label: string, isEmpty: boolean) => void;
   setCategoryCount: (count: number) => void;
 };
@@ -48,7 +49,7 @@ const useEmptyCategoryTracking = (): UseEmptyCategoryTrackingResult => {
     });
   }, []);
 
-  return { emptyCategoryLabels, reportCategoryEmpty, setCategoryCount };
+  return { emptyCategoryLabels, categoriesResolved, reportCategoryEmpty, setCategoryCount };
 };
 
 export default useEmptyCategoryTracking;

@@ -26,6 +26,7 @@ export type McpCatalogExtension = {
   setTotalItems: (totalItems: number) => void;
   mcpApiState: ModelCatalogAPIState;
   emptyCategoryLabels: Set<string>;
+  categoriesResolved: boolean;
   reportCategoryEmpty: (label: string, isEmpty: boolean) => void;
   setCategoryCount: (count: number) => void;
 };

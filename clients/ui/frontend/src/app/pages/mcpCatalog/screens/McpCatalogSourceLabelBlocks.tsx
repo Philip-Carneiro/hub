@@ -12,6 +12,7 @@ const McpCatalogSourceLabelBlocks: React.FC = () => {
     selectedSourceLabel,
     setSelectedSourceLabel,
     emptyCategoryLabels,
+    categoriesResolved,
   } = React.useContext(McpCatalogContext);
 
   const getLabelDisplayNameForMcp = React.useCallback(
@@ -19,6 +20,10 @@ const McpCatalogSourceLabelBlocks: React.FC = () => {
       getLabelDisplayName(label, catalogLabels, OTHER_MCP_SERVERS_DISPLAY_NAME, 'servers'),
     [catalogLabels],
   );
+
+  if (!categoriesResolved) {
+    return null;
+  }
 
   return (
     <CatalogSourceLabelToggle
