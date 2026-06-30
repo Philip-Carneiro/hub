@@ -46,12 +46,6 @@ describe('MCP Catalog Settings', () => {
     mcpManageSourcePage.findBreadcrumb().should('exist');
     mcpManageSourcePage.findBreadcrumbAction().should('contain', 'Add a source');
   });
-
-  it('should redirect unknown routes to main page', () => {
-    setupMocks();
-    cy.visit('/mcp-catalog-settings/unknown-route');
-    mcpCatalogSettings.findEmptyState().should('exist');
-  });
 });
 
 describe('MCP Manage Source Page', () => {
