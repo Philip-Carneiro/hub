@@ -1,10 +1,4 @@
-export const agentsCatalogUrl = (sourceId?: string): string =>
-  `/agents-catalog${sourceId ? `/${sourceId}` : ''}`;
+export const agentsCatalogUrl = (): string => '/agents-catalog';
 
-export const getAgentsCatalogDetailsRoute = ({
-  sourceId = '',
-  agentName,
-}: {
-  sourceId?: string;
-  agentName: string;
-}): string => `${agentsCatalogUrl(sourceId)}/${encodeURIComponent(agentName)}`;
+export const getAgentsCatalogDetailsRoute = (agentName: string): string =>
+  `${agentsCatalogUrl()}/${encodeURIComponent(agentName)}`;

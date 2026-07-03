@@ -6,8 +6,7 @@ import { ApplicationsPage } from 'mod-arch-shared';
 import { agentsCatalogUrl } from '~/app/routes/agentsCatalog/agentsCatalog';
 
 const AgentDetailsPage: React.FC = () => {
-  const { agentName: rawAgentName = '' } = useParams<{ agentName: string }>();
-  const agentName = decodeURIComponent(rawAgentName);
+  const { agentName = '' } = useParams<{ agentName: string }>();
 
   return (
     <ApplicationsPage

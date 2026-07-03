@@ -1,6 +1,11 @@
 import { agentsCatalog, agentDetailsPage } from '~/__tests__/cypress/cypress/pages/agentsCatalog';
+import { initAgentsCatalogIntercepts } from './agentsCatalogTestUtils';
 
 describe('Agents Catalog Page', () => {
+  beforeEach(() => {
+    initAgentsCatalogIntercepts();
+  });
+
   it('Agents Catalog tab should be enabled in nav', () => {
     agentsCatalog.visit();
     agentsCatalog.tabEnabled();
@@ -8,6 +13,10 @@ describe('Agents Catalog Page', () => {
 });
 
 describe('Agent Details Page', () => {
+  beforeEach(() => {
+    initAgentsCatalogIntercepts();
+  });
+
   it('should display breadcrumb with link back to catalog', () => {
     agentDetailsPage.visit('my-agent');
     agentDetailsPage.findBreadcrumbCatalogLink().should('be.visible');
