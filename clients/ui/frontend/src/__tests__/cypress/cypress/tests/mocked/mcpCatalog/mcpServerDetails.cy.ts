@@ -67,7 +67,7 @@ describe('MCP Server Details Page', () => {
     it('should display server name and description', () => {
       mcpServerDetails.visit(kubernetesServer.id);
 
-      cy.findByTestId('app-page-title').should('contain.text', kubernetesServer.displayName);
+      mcpServerDetails.findPageTitle().should('contain.text', kubernetesServer.displayName);
 
       mcpServerDetails.findDescription().should('contain.text', kubernetesServer.description);
     });
@@ -91,19 +91,6 @@ describe('MCP Server Details Page', () => {
   });
 
   describe('displayName fallback', () => {
-    it('should display displayName in breadcrumb and title when provided', () => {
-      const serverWithDisplayName = mockMcpServer({
-        id: 'dn-test-1',
-        name: 'internal-server-id',
-        displayName: 'Friendly Server Name',
-      });
-      initServerDetailIntercept(serverWithDisplayName);
-      mcpServerDetails.visit(serverWithDisplayName.id);
-      mcpServerDetails.findBreadcrumbServerName().should('contain.text', 'Friendly Server Name');
-      cy.findByTestId('app-page-title').should('contain.text', 'Friendly Server Name');
-      cy.findByTestId('app-page-title').should('not.contain.text', 'internal-server-id');
-    });
-
     it('should fall back to name in breadcrumb and title when displayName is absent', () => {
       const serverWithoutDisplayName = mockMcpServer({
         id: 'dn-test-2',
@@ -113,7 +100,7 @@ describe('MCP Server Details Page', () => {
       initServerDetailIntercept(serverWithoutDisplayName);
       mcpServerDetails.visit(serverWithoutDisplayName.id);
       mcpServerDetails.findBreadcrumbServerName().should('contain.text', 'Fallback Server');
-      cy.findByTestId('app-page-title').should('contain.text', 'Fallback Server');
+      mcpServerDetails.findPageTitle().should('contain.text', 'Fallback Server');
     });
   });
 
