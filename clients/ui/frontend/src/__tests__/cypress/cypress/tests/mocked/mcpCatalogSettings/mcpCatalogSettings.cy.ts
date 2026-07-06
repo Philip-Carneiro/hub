@@ -21,6 +21,9 @@ const setupMocks = () => {
 describe('MCP Catalog Settings', () => {
   beforeEach(() => {
     setupMocks();
+    cy.intercept('GET', '**/settings/mcp_catalog/source_configs*', {
+      data: { catalogs: [] },
+    });
   });
 
   it('should display the empty state with title and description', () => {
