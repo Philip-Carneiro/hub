@@ -177,7 +177,7 @@ export type McpServerListParams = {
 };
 
 export enum McpCatalogSourceType {
-  YAML = 'YAML',
+  YAML = 'yaml',
 }
 
 export type McpCatalogSourceConfig = {
@@ -254,5 +254,4 @@ export type McpCatalogSettingsAPIs = {
   getMcpCatalogSourceConfig: GetMcpCatalogSourceConfig;
   updateMcpCatalogSourceConfig: UpdateMcpCatalogSourceConfig;
   deleteMcpCatalogSourceConfig: DeleteMcpCatalogSourceConfig;
-  previewMcpCatalogSource: PreviewMcpCatalogSource;
 };

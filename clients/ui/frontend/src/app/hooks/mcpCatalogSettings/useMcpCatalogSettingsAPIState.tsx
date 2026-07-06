@@ -6,7 +6,6 @@ import {
   getMcpCatalogSourceConfig,
   getMcpCatalogSourceConfigs,
   updateMcpCatalogSourceConfig,
-  previewMcpCatalogSource,
 } from '~/app/api/mcpCatalogSettings/service';
 import { McpCatalogSettingsAPIs } from '~/app/mcpServerCatalogTypes';
 
@@ -23,7 +22,6 @@ const useMcpCatalogSettingsAPIState = (
       getMcpCatalogSourceConfig: getMcpCatalogSourceConfig(path, queryParameters),
       updateMcpCatalogSourceConfig: updateMcpCatalogSourceConfig(path, queryParameters),
       deleteMcpCatalogSourceConfig: deleteMcpCatalogSourceConfig(path, queryParameters),
-      previewMcpCatalogSource: previewMcpCatalogSource(path, queryParameters),
     }),
     [queryParameters],
   );

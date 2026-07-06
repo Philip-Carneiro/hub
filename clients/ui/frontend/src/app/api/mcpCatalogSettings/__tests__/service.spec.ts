@@ -1,6 +1,7 @@
 import { restCREATE, handleRestFailures } from 'mod-arch-core';
 import { previewMcpCatalogSource } from '~/app/api/mcpCatalogSettings/service';
 import { McpCatalogSourceType } from '~/app/mcpServerCatalogTypes';
+import { PreviewCatalogSourceQueryParams } from '~/app/modelCatalogTypes';
 
 const mockRestPromise = Promise.resolve({ data: {} });
 
@@ -109,7 +110,9 @@ describe('previewMcpCatalogSource', () => {
     await previewMcpCatalogSource('/api/v1/settings/mcp_catalog', { someKey: 'base' })(
       APIOptionsMock,
       mockData,
-      { filterStatus: 'all' },
+      { filterStatus: 'all', assetType: 'models' } as PreviewCatalogSourceQueryParams & {
+        assetType: string;
+      },
     );
 
     expect(restCREATEMock).toHaveBeenCalledWith(
