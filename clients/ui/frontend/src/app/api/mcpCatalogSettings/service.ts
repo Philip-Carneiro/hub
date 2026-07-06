@@ -8,15 +8,13 @@ import {
   restGET,
   restPATCH,
 } from 'mod-arch-core';
-import {
-  CatalogSourcePreviewResult,
-  PreviewCatalogSourceQueryParams,
-} from '~/app/modelCatalogTypes';
+import { PreviewCatalogSourceQueryParams } from '~/app/modelCatalogTypes';
 import {
   McpCatalogSourceConfig,
   McpCatalogSourceConfigList,
   McpCatalogSourceConfigPayload,
   McpCatalogSourcePreviewRequest,
+  McpCatalogSourcePreviewResult,
 } from '~/app/mcpServerCatalogTypes';
 
 export const getMcpCatalogSourceConfigs =
@@ -86,17 +84,17 @@ export const previewMcpCatalogSource =
     opts: APIOptions,
     data: McpCatalogSourcePreviewRequest,
     additionalQueryParams?: PreviewCatalogSourceQueryParams,
-  ): Promise<CatalogSourcePreviewResult> =>
+  ): Promise<McpCatalogSourcePreviewResult> =>
     handleRestFailures(
       restCREATE(
         hostPath,
         '/source_preview',
         assembleModArchBody(data),
-        { ...queryParams, assetType: 'mcp_servers', ...additionalQueryParams },
+        { ...queryParams, ...additionalQueryParams, assetType: 'mcp_servers' },
         opts,
       ),
     ).then((response) => {
-      if (isModArchResponse<CatalogSourcePreviewResult>(response)) {
+      if (isModArchResponse<McpCatalogSourcePreviewResult>(response)) {
         return response.data;
       }
       throw new Error('Invalid response format');

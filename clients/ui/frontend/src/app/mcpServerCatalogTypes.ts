@@ -1,9 +1,6 @@
 import { APIOptions } from 'mod-arch-core';
 import { PaginationParams } from '~/app/shared/types/catalogTypes';
-import {
-  CatalogSourcePreviewResult,
-  PreviewCatalogSourceQueryParams,
-} from '~/app/modelCatalogTypes';
+import { PreviewCatalogSourceQueryParams } from '~/app/modelCatalogTypes';
 
 export type McpDeploymentMode = 'local' | 'remote';
 
@@ -179,10 +176,14 @@ export type McpServerListParams = {
   q?: string;
 };
 
+export enum McpCatalogSourceType {
+  YAML = 'YAML',
+}
+
 export type McpCatalogSourceConfig = {
   id: string;
   name: string;
-  type: string;
+  type: McpCatalogSourceType;
   enabled?: boolean;
   labels?: string[];
   isDefault?: boolean;
@@ -216,17 +217,36 @@ export type UpdateMcpCatalogSourceConfig = (
 export type DeleteMcpCatalogSourceConfig = (opts: APIOptions, sourceId: string) => Promise<void>;
 
 export type McpCatalogSourcePreviewRequest = {
-  type: string;
+  type: McpCatalogSourceType;
   includedServers?: string[];
   excludedServers?: string[];
   properties?: Record<string, unknown>;
+};
+
+export type McpCatalogSourcePreviewAsset = {
+  name: string;
+  included: boolean;
+};
+
+export type McpCatalogSourcePreviewSummary = {
+  totalAssets: number;
+  includedAssets: number;
+  excludedAssets: number;
+};
+
+export type McpCatalogSourcePreviewResult = {
+  items: McpCatalogSourcePreviewAsset[];
+  summary: McpCatalogSourcePreviewSummary;
+  nextPageToken: string;
+  pageSize: number;
+  size: number;
 };
 
 export type PreviewMcpCatalogSource = (
   opts: APIOptions,
   data: McpCatalogSourcePreviewRequest,
   queryParams?: PreviewCatalogSourceQueryParams,
-) => Promise<CatalogSourcePreviewResult>;
+) => Promise<McpCatalogSourcePreviewResult>;
 
 export type McpCatalogSettingsAPIs = {
   getMcpCatalogSourceConfigs: GetMcpCatalogSourceConfigs;

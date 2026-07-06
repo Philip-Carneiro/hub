@@ -1,11 +1,15 @@
-import { McpCatalogSourceConfigList, McpCatalogSourceConfig } from '~/app/mcpServerCatalogTypes';
+import {
+  McpCatalogSourceConfigList,
+  McpCatalogSourceConfig,
+  McpCatalogSourceType,
+} from '~/app/mcpServerCatalogTypes';
 
 export const mockMcpCatalogSourceConfig = (
   partial?: Partial<McpCatalogSourceConfig>,
 ): McpCatalogSourceConfig => ({
   id: 'sample_mcp_source_1',
   name: 'MCP Source 1',
-  type: 'yaml',
+  type: McpCatalogSourceType.YAML,
   enabled: true,
   includedServers: [],
   excludedServers: [],
