@@ -17,7 +17,7 @@ const McpCatalogSourceStatus: React.FC<McpCatalogSourceStatusProps> = ({
     React.useContext(McpCatalogSettingsContext);
   const [isErrorModalOpen, setIsErrorModalOpen] = React.useState(false);
 
-  if (!mcpCatalogSourceConfig.enabled) {
+  if (!mcpCatalogSourceConfig.enabled || mcpCatalogSourceConfig.isDefault) {
     return <>-</>;
   }
 

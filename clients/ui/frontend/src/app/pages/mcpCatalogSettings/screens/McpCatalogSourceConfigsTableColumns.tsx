@@ -5,7 +5,7 @@ export const mcpCatalogSourceConfigsColumns: SortableData<McpCatalogSourceConfig
   {
     field: 'name',
     label: 'Source name',
-    sortable: false,
+    sortable: (a, b) => a.name.localeCompare(b.name),
     width: 20,
   },
   {

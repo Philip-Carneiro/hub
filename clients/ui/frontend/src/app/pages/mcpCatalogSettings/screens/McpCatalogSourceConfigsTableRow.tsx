@@ -8,10 +8,7 @@ import { ModelVisibilityBadgeColor } from '~/concepts/modelCatalogSettings/const
 import DeleteModal from '~/app/shared/components/DeleteModal';
 import { useNotification } from '~/app/hooks/useNotification';
 import McpCatalogSourceStatus from '~/app/pages/mcpCatalogSettings/components/McpCatalogSourceStatus';
-
-const MCP_SOURCE_TYPE_LABELS: Record<string, string> = {
-  yaml: 'YAML file',
-};
+import { MCP_SOURCE_TYPE_LABELS } from '~/app/pages/mcpCatalogSettings/const';
 
 type McpCatalogSourceConfigsTableRowProps = {
   mcpCatalogSourceConfig: McpCatalogSourceConfig;
