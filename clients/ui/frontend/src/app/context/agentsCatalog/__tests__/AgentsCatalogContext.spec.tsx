@@ -95,9 +95,12 @@ describe('AgentsCatalogContext', () => {
     });
     expect(result.current.filters).toEqual({ framework: ['LangGraph'] });
     act(() => {
-      result.current.setFilters((prev) => ({ ...prev, labels: ['research'] }));
+      result.current.setFilters((prev) => ({ ...prev, category: ['Web search'] }));
     });
-    expect(result.current.filters).toEqual({ framework: ['LangGraph'], labels: ['research'] });
+    expect(result.current.filters).toEqual({
+      framework: ['LangGraph'],
+      category: ['Web search'],
+    });
   });
 
   it('updates pagination via setPage, setPageSize, setTotalItems', () => {

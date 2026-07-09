@@ -3558,9 +3558,9 @@ func GetMcpServerCatalogLabelListMock() models.CatalogLabelList {
 // ========== Agent Catalog Mock Data ==========
 
 func GetAgentMocks() []models.Agent {
-	langgraphFramework := "langgraph"
-	crewaiFramework := "crewai"
-	autogenFramework := "autogen"
+	langgraphFramework := "LangGraph"
+	crewaiFramework := "CrewAI"
+	autogenFramework := "Autogen"
 
 	sourceID1 := "community-agent-source"
 	sourceID2 := "organization-agent-source"
@@ -3631,7 +3631,7 @@ func GetAgentMocks() []models.Agent {
 			Description:   &desc1,
 			Readme:        &readme1,
 			Framework:     &langgraphFramework,
-			Labels:        []string{"code-review", "developer-tools", "security"},
+			Labels:        []string{"Tool use", "General purpose"},
 			Logo:          &logo1,
 			RepositoryURL: &repoURL1,
 			Env: []models.AgentEnvVar{
@@ -3658,7 +3658,7 @@ func GetAgentMocks() []models.Agent {
 			Description:   &desc2,
 			Readme:        &readme2,
 			Framework:     &crewaiFramework,
-			Labels:        []string{"research", "academic", "summarization"},
+			Labels:        []string{"General purpose", "Web search"},
 			Logo:          &logo2,
 			RepositoryURL: &repoURL2,
 			Env: []models.AgentEnvVar{
@@ -3680,7 +3680,7 @@ func GetAgentMocks() []models.Agent {
 			Description:   &desc3,
 			Readme:        &readme3,
 			Framework:     &autogenFramework,
-			Labels:        []string{"deployment", "ci-cd", "operations"},
+			Labels:        []string{"Deployment", "Tool use"},
 			Logo:          &logo3,
 			RepositoryURL: &repoURL3,
 			Env: []models.AgentEnvVar{
@@ -3701,7 +3701,7 @@ func GetAgentMocks() []models.Agent {
 			Description:   &desc4,
 			Readme:        &readme4,
 			Framework:     &langgraphFramework,
-			Labels:        []string{"data-engineering", "etl", "monitoring"},
+			Labels:        []string{"General purpose", "Tool use"},
 			Logo:          &logo4,
 			RepositoryURL: &repoURL4,
 			Env: []models.AgentEnvVar{
@@ -3722,7 +3722,7 @@ func GetAgentMocks() []models.Agent {
 			DisplayName: stringToPointer("Websearch Agent"),
 			Description: stringToPointer("Web search agent built with the CrewAI framework. Uses a ReAct-style crew with a web search tool to answer user questions."),
 			Framework:   &crewaiFramework,
-			Labels:      []string{"web-search", "a2a", "crewai"},
+			Labels:      []string{"Web search", "MCP"},
 			Artifacts: []models.AgentArtifact{
 				{URI: "ghcr.io/example/websearch-agent:v1.0.0"},
 			},
@@ -3735,8 +3735,8 @@ func GetAgentMocks() []models.Agent {
 			SourceID:    &sourceID1,
 			DisplayName: stringToPointer("Google ADK 2.0 Agent"),
 			Description: stringToPointer("General-purpose agent using Google Agent Development Kit (ADK) 2.0 with a web search tool, routing inference through a LiteLLM OpenAI-compatible API."),
-			Framework:   stringToPointer("google-adk"),
-			Labels:      []string{"web-search", "google-adk", "general-purpose"},
+			Framework:   stringToPointer("Google ADK"),
+			Labels:      []string{"Web search", "General purpose"},
 			Artifacts: []models.AgentArtifact{
 				{URI: "ghcr.io/example/google-adk-agent:v2.0.0"},
 			},
@@ -3749,8 +3749,8 @@ func GetAgentMocks() []models.Agent {
 			SourceID:    &sourceID2,
 			DisplayName: stringToPointer("Simple Tool Calling Agent"),
 			Description: stringToPointer("Tool-calling agent built with Langflow's visual flow builder. It calls external APIs as tools (weather forecasts, national park data) and reasons over the results to answer user questions."),
-			Framework:   stringToPointer("langflow"),
-			Labels:      []string{"tool-use", "external-apis", "langflow"},
+			Framework:   stringToPointer("Claude Code"),
+			Labels:      []string{"Tool use", "MCP"},
 			Artifacts: []models.AgentArtifact{
 				{URI: "ghcr.io/example/simple-tool-calling-agent:v1.0.0"},
 			},
@@ -3764,7 +3764,7 @@ func GetAgentMocks() []models.Agent {
 			DisplayName: stringToPointer("ReACT Agent with Database Memory"),
 			Description: stringToPointer("ReAct agent with PostgreSQL-based conversation memory. It reasons and calls tools step by step, storing conversation history by thread ID so sessions persist across requests."),
 			Framework:   &langgraphFramework,
-			Labels:      []string{"react", "database", "memory"},
+			Labels:      []string{"General purpose", "Tool use"},
 			Artifacts: []models.AgentArtifact{
 				{URI: "ghcr.io/example/react-database-agent:v1.1.0"},
 			},
@@ -3777,8 +3777,8 @@ func GetAgentMocks() []models.Agent {
 			SourceID:    &sourceID1,
 			DisplayName: stringToPointer("LlamaIndex Websearch Agent"),
 			Description: stringToPointer("Agent built on LlamaIndex that uses a web search tool to query the internet and use the results in its answers."),
-			Framework:   stringToPointer("llamaindex"),
-			Labels:      []string{"web-search", "llamaindex"},
+			Framework:   stringToPointer("A2A"),
+			Labels:      []string{"Web search", "Multi-agent"},
 			Artifacts: []models.AgentArtifact{
 				{URI: "ghcr.io/example/llamaindex-websearch:v1.0.0"},
 			},
@@ -3792,7 +3792,7 @@ func GetAgentMocks() []models.Agent {
 			DisplayName: stringToPointer("OpenClaw"),
 			Description: stringToPointer("OpenClaw agent deployment templates for Red Hat OpenShift AI, including container images and Helm-based deployment patterns."),
 			Framework:   &autogenFramework,
-			Labels:      []string{"deployment", "openshift", "helm"},
+			Labels:      []string{"Deployment", "General purpose"},
 			Artifacts: []models.AgentArtifact{
 				{URI: "ghcr.io/example/openclaw:v2.0.0"},
 			},
@@ -3806,7 +3806,7 @@ func GetAgentMocks() []models.Agent {
 			DisplayName: stringToPointer("Multi-Agent Orchestrator"),
 			Description: stringToPointer("Orchestrates multiple sub-agents using a planning-based approach. Decomposes complex tasks and routes to specialized agents."),
 			Framework:   &crewaiFramework,
-			Labels:      []string{"multi-agent", "orchestration", "planning"},
+			Labels:      []string{"Multi-agent", "General purpose"},
 			Artifacts: []models.AgentArtifact{
 				{URI: "ghcr.io/example/multi-agent-orchestrator:v1.3.0"},
 			},
@@ -3820,7 +3820,7 @@ func GetAgentMocks() []models.Agent {
 			DisplayName: stringToPointer("A2A: LangGraph → CrewAI"),
 			Description: stringToPointer("A2A example where a CrewAI pod exposes an A2A JSON-RPC server and a LangGraph pod orchestrates calls to the Crew specialist over HTTP/A2A, locally or on OpenShift."),
 			Framework:   &crewaiFramework,
-			Labels:      []string{"a2a", "multi-agent", "a2a-protocol"},
+			Labels:      []string{"Multi-agent", "MCP"},
 			Artifacts: []models.AgentArtifact{
 				{URI: "ghcr.io/example/a2a-langgraph-crewai:v1.0.0"},
 			},

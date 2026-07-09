@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { agentsCatalog, agentDetailsPage } from '~/__tests__/cypress/cypress/pages/agentsCatalog';
 import { initAgentsCatalogIntercepts } from './agentsCatalogTestUtils';
 
@@ -36,5 +37,35 @@ describe('Agent Details Page', () => {
   it('should redirect from :agentName to :agentName/overview', () => {
     cy.visit('/agents-catalog/test-agent');
     cy.url().should('include', '/agents-catalog/test-agent/overview');
+  });
+});
+
+describe('Agents Catalog Gallery', () => {
+  it('should render agent cards when agents are available', () => {
+    initAgentsCatalogIntercepts({ agentsPerCategory: 3 });
+    agentsCatalog.visit();
+    agentsCatalog.findCards().should('have.length.greaterThan', 0);
+  });
+
+  it('should display agent name and description in cards', () => {
+    initAgentsCatalogIntercepts({ agentsPerCategory: 2 });
+    agentsCatalog.visit();
+    agentsCatalog.findCardDetailLink('community_agents-agent-1').should('be.visible');
+    agentsCatalog.findCardDescription('community_agents-agent-1').should('be.visible');
+  });
+
+  it('should navigate to agent details when clicking card link', () => {
+    initAgentsCatalogIntercepts({ agentsPerCategory: 1 });
+    agentsCatalog.visit();
+    agentsCatalog.findCardDetailLink('community_agents-agent-1').click();
+    cy.url().should('include', '/agents-catalog/');
+  });
+});
+
+describe('Agents Catalog Empty States', () => {
+  it('should show no-categories state when no sources configured', () => {
+    initAgentsCatalogIntercepts({ sources: [], agentsPerCategory: 0 });
+    agentsCatalog.visit();
+    agentsCatalog.findNoCategoriesState().should('be.visible');
   });
 });
