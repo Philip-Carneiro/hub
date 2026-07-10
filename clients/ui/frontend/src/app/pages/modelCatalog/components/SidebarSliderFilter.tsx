@@ -102,7 +102,7 @@ const SidebarSliderFilter: React.FC<SidebarSliderFilterProps> = ({
       toggle={toggle}
       shouldFocusToggleOnSelect={false}
     >
-      <div ref={contentRef}>
+      <div ref={contentRef} role="group" aria-label={`${label} filter controls`}>
         <Flex
           direction={{ default: 'column' }}
           spaceItems={{ default: 'spaceItemsSm' }}

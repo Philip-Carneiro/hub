@@ -72,7 +72,7 @@ const MaxRpsFilter: React.FC = () => {
   );
 
   const filterContent = (
-    <div ref={contentRef}>
+    <div ref={contentRef} role="group" aria-label="Max RPS filter controls">
       <Flex
         direction={{ default: 'column' }}
         spaceItems={{ default: 'spaceItemsSm' }}

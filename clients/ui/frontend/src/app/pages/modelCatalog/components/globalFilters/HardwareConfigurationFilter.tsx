@@ -80,7 +80,7 @@ const HardwareConfigurationFilter: React.FC = () => {
   );
 
   const filterContent = (
-    <div ref={contentRef}>
+    <div ref={contentRef} role="group" aria-label="Hardware configuration filter controls">
       <Panel>
         <PanelMain className="pf-v6-u-p-md" style={{ maxHeight: '300px', overflowY: 'auto' }}>
           <Flex direction={{ default: 'column' }} spaceItems={{ default: 'spaceItemsSm' }}>

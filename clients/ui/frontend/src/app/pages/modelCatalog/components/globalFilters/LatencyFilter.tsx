@@ -230,7 +230,7 @@ const LatencyFilter: React.FC = () => {
   );
 
   const filterContent = (
-    <div ref={contentRef}>
+    <div ref={contentRef} role="group" aria-label="Latency filter controls">
       <Flex
         data-testid="latency-filter-content"
         direction={{ default: 'column' }}

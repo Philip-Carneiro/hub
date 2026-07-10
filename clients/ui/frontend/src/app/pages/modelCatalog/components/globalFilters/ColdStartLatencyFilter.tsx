@@ -88,7 +88,7 @@ const ColdStartLatencyFilter: React.FC = () => {
   );
 
   const filterContent = (
-    <div ref={contentRef}>
+    <div ref={contentRef} role="group" aria-label="Cold start load time filter controls">
       <Flex
         direction={{ default: 'column' }}
         spaceItems={{ default: 'spaceItemsSm' }}
