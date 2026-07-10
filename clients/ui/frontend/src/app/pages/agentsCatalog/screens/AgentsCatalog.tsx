@@ -9,7 +9,6 @@ import { AGENTS_CATALOG_TITLE, AGENTS_CATALOG_DESCRIPTION } from '~/app/pages/ag
 import { CatalogPageLayout, EmptyCatalogState } from '~/app/shared/components/catalog';
 import AgentsCatalogIcon from '~/app/pages/agentsCatalog/AgentsCatalogIcon';
 import AgentsCatalogSourceLabelSelector from './AgentsCatalogSourceLabelSelector';
-import AgentsCatalogAllAgentsView from './AgentsCatalogAllAgentsView';
 import AgentsCatalogGalleryView from './AgentsCatalogGalleryView';
 
 const ICON_SIZE = 40;
@@ -56,7 +55,8 @@ const AgentsCatalog: React.FC = () => {
   } = React.useContext(AgentsCatalogContext);
 
   const filtersApplied = hasAgentFiltersApplied(filters, searchQuery);
-  const isAllAgentsView = selectedSourceLabel === undefined && !filtersApplied;
+  // ponytail: agents catalog always shows flat gallery, no category grouping
+  const isAllAgentsView = false;
 
   const handleSearch = React.useCallback(
     (term: string) => {
@@ -107,7 +107,7 @@ const AgentsCatalog: React.FC = () => {
             onResetAllFilters={handleResetAllFilters}
           />
         )}
-        renderAllItemsView={() => <AgentsCatalogAllAgentsView searchTerm={searchQuery} />}
+        renderAllItemsView={() => null}
         renderGalleryView={(isSingleCategory, singleCategoryLabel) => (
           <AgentsCatalogGalleryView
             handleFilterReset={handleResetAllFilters}

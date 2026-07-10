@@ -3856,18 +3856,6 @@ func GetAgentFilterOptionsListMock() models.FilterOptionsList {
 		},
 	}
 
-	filters["category"] = models.FilterOption{
-		Type: FilterOptionTypeString,
-		Values: []interface{}{
-			"Deployment",
-			"General purpose",
-			"MCP",
-			"Multi-agent",
-			"Tool use",
-			"Web search",
-		},
-	}
-
 	filters["communicationProtocol"] = models.FilterOption{
 		Type: FilterOptionTypeString,
 		Values: []interface{}{

@@ -518,14 +518,6 @@ func agentMatchesFilter(agent models.Agent, key string, values []string) bool {
 				return true
 			}
 		}
-	case "category":
-		for _, v := range values {
-			for _, label := range agent.Labels {
-				if strings.EqualFold(label, v) {
-					return true
-				}
-			}
-		}
 	case "communicationProtocol":
 		if agent.CustomProperties != nil {
 			if cp, ok := (*agent.CustomProperties)["communicationProtocol"]; ok && cp.MetadataStringValue != nil {

@@ -13,7 +13,7 @@ import {
 import { ArrowRightIcon, FilterIcon } from '@patternfly/react-icons';
 import { useThemeContext } from 'mod-arch-kubeflow';
 import { ThemeAwareSearchInput } from 'mod-arch-shared';
-import { RESET_ALL_FILTERS_LABEL } from '~/concepts/modelCatalog/const';
+import { RESET_ALL_FILTERS_LABEL } from '~/app/shared/components/catalog';
 import { AgentsCatalogContext } from '~/app/context/agentsCatalog/AgentsCatalogContext';
 import { hasAgentFiltersApplied } from '~/app/pages/agentsCatalog/utils/agentsCatalogUtils';
 import AgentsCatalogActiveFilters from '~/app/pages/agentsCatalog/components/AgentsCatalogActiveFilters';

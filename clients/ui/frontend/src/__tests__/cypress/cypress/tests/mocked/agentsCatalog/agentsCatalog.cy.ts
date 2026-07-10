@@ -63,9 +63,9 @@ describe('Agents Catalog Gallery', () => {
 });
 
 describe('Agents Catalog Empty States', () => {
-  it('should show no-categories state when no sources configured', () => {
+  it('should show empty state when no sources configured', () => {
     initAgentsCatalogIntercepts({ sources: [], agentsPerCategory: 0 });
     agentsCatalog.visit();
-    agentsCatalog.findNoCategoriesState().should('be.visible');
+    agentsCatalog.findEmptyState().should('be.visible');
   });
 });

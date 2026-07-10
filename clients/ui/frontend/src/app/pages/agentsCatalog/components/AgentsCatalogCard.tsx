@@ -20,9 +20,19 @@ type AgentsCatalogCardProps = {
   agent: Agent;
 };
 
+const AgentFallbackIcon: React.FC = () => (
+  <span
+    className="pf-v6-u-display-inline-block pf-v6-u-font-size-2xl pf-v6-u-color-200"
+    aria-hidden
+  >
+    <AgentsCatalogIcon />
+  </span>
+);
+
 const AgentsCatalogCard: React.FC<AgentsCatalogCardProps> = React.memo(({ agent }) => {
   const agentId = agent.id;
   const cardLabels = [agent.framework, ...(agent.labels ?? [])].filter(Boolean);
+  const [logoFailed, setLogoFailed] = React.useState(false);
 
   return (
     <Card isFullHeight data-testid={`agent-catalog-card-${agentId}`}>
@@ -33,20 +43,16 @@ const AgentsCatalogCard: React.FC<AgentsCatalogCardProps> = React.memo(({ agent 
           className="pf-v6-u-mb-md"
         >
           <FlexItem>
-            {agent.logo ? (
+            {agent.logo && !logoFailed ? (
               <img
                 src={agent.logo}
                 alt=""
                 style={{ height: '32px', width: '32px' }}
                 data-testid={`agent-catalog-card-logo-${agentId}`}
+                onError={() => setLogoFailed(true)}
               />
             ) : (
-              <span
-                className="pf-v6-u-display-inline-block pf-v6-u-font-size-2xl pf-v6-u-color-200"
-                aria-hidden
-              >
-                <AgentsCatalogIcon />
-              </span>
+              <AgentFallbackIcon />
             )}
           </FlexItem>
         </Flex>

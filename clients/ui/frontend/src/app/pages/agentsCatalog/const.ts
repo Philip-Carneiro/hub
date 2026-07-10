@@ -6,14 +6,12 @@ export const AGENTS_CATALOG_DESCRIPTION =
 
 export const AGENT_FILTER_KEYS: AgentFilterCategoryKey[] = [
   'framework',
-  'category',
   'communicationProtocol',
   'testedModels',
 ];
 
 export const AGENT_FILTER_CATEGORY_NAMES: Record<AgentFilterCategoryKey, string> = {
   framework: 'Framework',
-  category: 'Category',
   communicationProtocol: 'Communication protocol',
   testedModels: 'Tested models',
 };

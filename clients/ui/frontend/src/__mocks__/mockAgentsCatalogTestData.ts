@@ -296,10 +296,6 @@ export const mockAgentsCatalogFilterOptions = (
   partial?: Partial<AgentsCatalogFilterOptionsList>,
 ): AgentsCatalogFilterOptionsList => ({
   filters: {
-    category: {
-      type: 'string',
-      values: ['Deployment', 'General purpose', 'MCP', 'Multi-agent', 'Tool use', 'Web search'],
-    },
     communicationProtocol: {
       type: 'string',
       values: ['A2A', 'Custom', 'MCP'],

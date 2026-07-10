@@ -6,14 +6,14 @@ describe('mapBackendFilterOptions', () => {
     const raw = {
       filters: {
         framework: { type: 'string', values: ['LangGraph', 'CrewAI'] },
-        category: { type: 'string', values: ['General purpose'] },
+        communicationProtocol: { type: 'string', values: ['A2A'] },
       },
     } as unknown as CatalogFilterOptionsList;
 
     const result = mapBackendFilterOptions(raw);
     expect(result.filters).toEqual({
       framework: { type: 'string', values: ['LangGraph', 'CrewAI'] },
-      category: { type: 'string', values: ['General purpose'] },
+      communicationProtocol: { type: 'string', values: ['A2A'] },
     });
   });
 
