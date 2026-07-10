@@ -37,7 +37,7 @@ export type AgentList = PaginationParams & { items?: Agent[] };
 
 export type AgentListParams = {
   sourceLabel?: string;
-  pageSize?: number | string;
+  pageSize?: number;
   nextPageToken?: string;
   filterQuery?: string;
   namedQuery?: string;

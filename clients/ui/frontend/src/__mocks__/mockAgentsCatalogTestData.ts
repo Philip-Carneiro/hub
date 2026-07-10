@@ -26,39 +26,16 @@ export const mockAgentList = (partial?: Partial<AgentList>): AgentList => ({
   ...partial,
 });
 
-export const mockAgents: Agent[] = [
-  mockAgent(),
-  mockAgent({
-    id: '2',
-    name: 'code-reviewer',
-    displayName: 'Code Reviewer',
-    description: 'Automated code review agent using static analysis and LLMs.',
-    framework: 'CrewAI',
-    source_id: 'sample',
-    labels: ['code-review', 'automation'],
-    repositoryUrl: 'https://github.com/example/code-reviewer',
-    artifacts: [{ uri: 'ghcr.io/example/code-reviewer:latest' }],
-  }),
-  mockAgent({
-    id: '3',
-    name: 'data-pipeline-agent',
-    displayName: 'Data Pipeline Agent',
-    description: 'An agent that orchestrates data pipeline tasks.',
-    framework: 'LangGraph',
-    source_id: 'sample',
-    labels: ['data', 'pipeline'],
-    readme: undefined,
-  }),
-];
-
 export const mockAgentsCatalogFilterOptions = (
   partial?: Partial<AgentsCatalogFilterOptionsList>,
 ): AgentsCatalogFilterOptionsList => ({
   filters: {
     framework: { type: 'string', values: ['LangGraph', 'CrewAI', 'AutoGen'] },
-    labels: {
+    category: { type: 'string', values: ['General purpose', 'Multi-agent', 'Tool use'] },
+    communicationProtocol: { type: 'string', values: ['A2A', 'MCP', 'Custom'] },
+    testedModels: {
       type: 'string',
-      values: ['research', 'code-review', 'data', 'automation', 'summarization'],
+      values: ['OpenAI-compatible endpoint', 'Anthropic-compatible endpoint'],
     },
   },
   ...partial,

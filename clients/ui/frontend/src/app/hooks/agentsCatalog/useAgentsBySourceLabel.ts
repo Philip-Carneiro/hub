@@ -52,12 +52,13 @@ export function useAgentsBySourceLabelWithAPI(
   const [totalSize, setTotalSize] = React.useState(0);
   const [nextPageTokenValue, setNextPageTokenValue] = React.useState('');
   const [isLoadingMore, setIsLoadingMore] = React.useState(false);
+  const isLoadingMoreRef = React.useRef(false);
   const [loadMoreError, setLoadMoreError] = React.useState<Error | undefined>();
 
   const buildAgentListParams = React.useCallback(
     (nextPageToken?: string): AgentListParams => ({
       sourceLabel,
-      pageSize: pageSize.toString(),
+      pageSize,
       ...(nextPageToken !== undefined && nextPageToken !== '' && { nextPageToken }),
       q: searchQuery.trim() || undefined,
       filterQuery,
@@ -93,10 +94,13 @@ export function useAgentsBySourceLabelWithAPI(
   }, [firstPageData, loaded, error]);
 
   const loadMore = React.useCallback(async () => {
-    if (!nextPageTokenValue || isLoadingMore || !apiAvailable) {
+    if (!nextPageTokenValue || !apiAvailable) {
       return;
     }
-
+    if (isLoadingMoreRef.current) {
+      return;
+    }
+    isLoadingMoreRef.current = true;
     setIsLoadingMore(true);
     setLoadMoreError(undefined);
 
@@ -114,14 +118,16 @@ export function useAgentsBySourceLabelWithAPI(
         ),
       );
     } finally {
+      isLoadingMoreRef.current = false;
       setIsLoadingMore(false);
     }
-  }, [api, apiAvailable, buildAgentListParams, isLoadingMore, nextPageTokenValue]);
+  }, [api, apiAvailable, buildAgentListParams, nextPageTokenValue]);
 
   React.useEffect(() => {
     setAllItems([]);
     setTotalSize(0);
     setNextPageTokenValue('');
+    isLoadingMoreRef.current = false;
     setIsLoadingMore(false);
     setLoadMoreError(undefined);
   }, [sourceLabel, pageSize, searchQuery, filterQuery, namedQuery, sortBy, sortOrder]);
@@ -130,22 +136,35 @@ export function useAgentsBySourceLabelWithAPI(
     setAllItems([]);
     setTotalSize(0);
     setNextPageTokenValue('');
+    isLoadingMoreRef.current = false;
     setIsLoadingMore(false);
     setLoadMoreError(undefined);
     refetch();
   }, [refetch]);
 
-  const paginatedData: PaginatedAgentList = {
-    items: allItems,
-    size: totalSize,
-    pageSize: firstPageData.pageSize,
-    nextPageToken: nextPageTokenValue,
-    loadMore,
-    isLoadingMore,
-    hasMore: Boolean(nextPageTokenValue),
-    refresh,
-    loadMoreError,
-  };
+  const paginatedData: PaginatedAgentList = React.useMemo(
+    () => ({
+      items: allItems,
+      size: totalSize,
+      pageSize: firstPageData.pageSize,
+      nextPageToken: nextPageTokenValue,
+      loadMore,
+      isLoadingMore,
+      hasMore: Boolean(nextPageTokenValue),
+      refresh,
+      loadMoreError,
+    }),
+    [
+      allItems,
+      totalSize,
+      firstPageData.pageSize,
+      nextPageTokenValue,
+      loadMore,
+      isLoadingMore,
+      refresh,
+      loadMoreError,
+    ],
+  );
 
   return {
     agents: paginatedData,
