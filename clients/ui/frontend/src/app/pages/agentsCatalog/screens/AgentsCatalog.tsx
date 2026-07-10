@@ -3,7 +3,6 @@ import { ApplicationsPage } from 'mod-arch-shared';
 import { SearchIcon } from '@patternfly/react-icons';
 import { Flex, FlexItem } from '@patternfly/react-core';
 import { AgentsCatalogContext } from '~/app/context/agentsCatalog/AgentsCatalogContext';
-import { hasAgentFiltersApplied } from '~/app/pages/agentsCatalog/utils/agentsCatalogUtils';
 import AgentsCatalogFilters from '~/app/pages/agentsCatalog/components/AgentsCatalogFilters';
 import { AGENTS_CATALOG_TITLE, AGENTS_CATALOG_DESCRIPTION } from '~/app/pages/agentsCatalog/const';
 import { CatalogPageLayout, EmptyCatalogState } from '~/app/shared/components/catalog';
@@ -46,7 +45,6 @@ const AgentsCatalog: React.FC = () => {
     clearAllFilters,
     selectedSourceLabel,
     setSelectedSourceLabel,
-    filters,
     catalogSources,
     catalogLabels,
     catalogSourcesLoaded,
@@ -54,7 +52,6 @@ const AgentsCatalog: React.FC = () => {
     setCategoryCount,
   } = React.useContext(AgentsCatalogContext);
 
-  const filtersApplied = hasAgentFiltersApplied(filters, searchQuery);
   // ponytail: agents catalog always shows flat gallery, no category grouping
   const isAllAgentsView = false;
 

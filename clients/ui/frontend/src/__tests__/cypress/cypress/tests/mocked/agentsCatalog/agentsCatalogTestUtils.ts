@@ -65,6 +65,20 @@ export const interceptAgentLabels = (): void => {
   );
 };
 
+const buildAgentsForSources = (sources: CatalogSource[], agentsPerCategory: number): Agent[] =>
+  sources.flatMap((source) =>
+    source.labels.flatMap((label) =>
+      Array.from({ length: agentsPerCategory }, (_, i) =>
+        mockAgent({
+          id: `${label}-agent-${i + 1}`,
+          name: `${label}-agent-${i + 1}`,
+          displayName: `${label} Agent ${i + 1}`,
+          source_id: source.id,
+        }),
+      ),
+    ),
+  );
+
 export const interceptAgentsByLabel = (
   sources: CatalogSource[],
   agentsPerCategory: number,
@@ -119,6 +133,18 @@ export const initAgentsCatalogIntercepts = ({
 }: InitInterceptsConfig = {}): void => {
   interceptAgentSources(sources);
   interceptAgentLabels();
+
+  // Generic intercept (no sourceLabel query) registered FIRST so that per-label
+  // intercepts registered after take priority (Cypress: last-registered wins).
+  const allAgents = buildAgentsForSources(sources, agentsPerCategory);
+  cy.interceptApi(
+    `GET /api/:apiVersion/agent_catalog/agents`,
+    {
+      path: { apiVersion: MODEL_CATALOG_API_VERSION },
+    },
+    mockAgentList({ items: allAgents, size: allAgents.length }),
+  );
+
   interceptAgentsByLabel(sources, agentsPerCategory);
 
   if (includeFilterOptions) {
