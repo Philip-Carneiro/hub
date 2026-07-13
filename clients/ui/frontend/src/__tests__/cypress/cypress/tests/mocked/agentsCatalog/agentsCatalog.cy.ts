@@ -60,6 +60,19 @@ describe('Agents Catalog Gallery', () => {
     agentsCatalog.findCardDetailLink('community_agents-agent-1').click();
     cy.url().should('include', '/agents-catalog/');
   });
+
+  it('should display labels on agent cards with correct count', () => {
+    // mockAgent defaults: framework='LangGraph', labels=['Web search','General purpose']
+    // Card renders cardLabels = [framework, ...labels] = 3 labels total
+    initAgentsCatalogIntercepts({ agentsPerCategory: 1 });
+    agentsCatalog.visit();
+
+    const agentId = 'community_agents-agent-1';
+    agentsCatalog.findCardLabels(agentId).should('have.length', 3);
+    agentsCatalog.findCardLabels(agentId).eq(0).should('contain.text', 'LangGraph');
+    agentsCatalog.findCardLabels(agentId).eq(1).should('contain.text', 'Web search');
+    agentsCatalog.findCardLabels(agentId).eq(2).should('contain.text', 'General purpose');
+  });
 });
 
 describe('Agents Catalog Empty States', () => {

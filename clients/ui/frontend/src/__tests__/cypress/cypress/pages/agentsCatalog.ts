@@ -40,6 +40,12 @@ class AgentsCatalog {
     return cy.findByTestId(`agent-catalog-card-framework-${agentId}`);
   }
 
+  findCardLabels(agentId: string) {
+    return cy.get(
+      `[data-testid="agent-catalog-card-${agentId}"] [data-testid="agent-catalog-card-label-${agentId}"]`,
+    );
+  }
+
   findSearchInput() {
     return cy.findByTestId('agents-catalog-search-input');
   }

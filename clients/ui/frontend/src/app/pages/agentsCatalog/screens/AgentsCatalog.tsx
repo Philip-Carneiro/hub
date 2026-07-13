@@ -22,7 +22,6 @@ const AgentsCatalog: React.FC = () => {
     setCategoryCount,
   } = React.useContext(AgentsCatalogContext);
 
-  // ponytail: agents catalog always shows flat gallery, no category grouping
   const isAllAgentsView = false;
 
   const handleSearch = React.useCallback(
