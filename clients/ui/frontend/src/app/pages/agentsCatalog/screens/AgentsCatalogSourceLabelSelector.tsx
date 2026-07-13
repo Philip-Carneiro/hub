@@ -17,6 +17,7 @@ import { RESET_ALL_FILTERS_LABEL } from '~/app/shared/components/catalog';
 import { AgentsCatalogContext } from '~/app/context/agentsCatalog/AgentsCatalogContext';
 import { hasAgentFiltersApplied } from '~/app/pages/agentsCatalog/utils/agentsCatalogUtils';
 import AgentsCatalogActiveFilters from '~/app/pages/agentsCatalog/components/AgentsCatalogActiveFilters';
+import AgentsCatalogSourceLabelBlocks from './AgentsCatalogSourceLabelBlocks';
 
 type AgentsCatalogSourceLabelSelectorProps = {
   searchTerm: string;
@@ -123,6 +124,14 @@ const AgentsCatalogSourceLabelSelector: React.FC<AgentsCatalogSourceLabelSelecto
             </Flex>
           </ToolbarContent>
         </Toolbar>
+      </StackItem>
+      <StackItem>
+        <Flex
+          justifyContent={{ default: 'justifyContentSpaceBetween' }}
+          alignItems={{ default: 'alignItemsCenter' }}
+        >
+          <AgentsCatalogSourceLabelBlocks />
+        </Flex>
       </StackItem>
     </Stack>
   );

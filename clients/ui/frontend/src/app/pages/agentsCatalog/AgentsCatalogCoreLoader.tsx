@@ -2,7 +2,9 @@ import * as React from 'react';
 import { Alert, Bullseye } from '@patternfly/react-core';
 import {
   ApplicationsPage,
+  KubeflowDocs,
   ProjectObjectType,
+  TitleWithIcon,
   typedEmptyImage,
   WhosMyAdministrator,
 } from 'mod-arch-shared';
@@ -20,7 +22,12 @@ const AgentsCatalogCoreLoader: React.FC = () => {
   if (catalogSourcesLoadError) {
     return (
       <ApplicationsPage
-        title={AGENTS_CATALOG_TITLE}
+        title={
+          <TitleWithIcon
+            title={AGENTS_CATALOG_TITLE}
+            objectType={ProjectObjectType.agentsCatalog}
+          />
+        }
         description={AGENTS_CATALOG_DESCRIPTION}
         headerContent={null}
         empty
@@ -39,7 +46,12 @@ const AgentsCatalogCoreLoader: React.FC = () => {
   if (!catalogSourcesLoaded) {
     return (
       <ApplicationsPage
-        title={AGENTS_CATALOG_TITLE}
+        title={
+          <TitleWithIcon
+            title={AGENTS_CATALOG_TITLE}
+            objectType={ProjectObjectType.agentsCatalog}
+          />
+        }
         description={AGENTS_CATALOG_DESCRIPTION}
         headerContent={null}
         empty
@@ -52,7 +64,12 @@ const AgentsCatalogCoreLoader: React.FC = () => {
   if (catalogSources?.items?.length === 0 || !hasSourcesWithModels(catalogSources)) {
     return (
       <ApplicationsPage
-        title={AGENTS_CATALOG_TITLE}
+        title={
+          <TitleWithIcon
+            title={AGENTS_CATALOG_TITLE}
+            objectType={ProjectObjectType.agentsCatalog}
+          />
+        }
         description={AGENTS_CATALOG_DESCRIPTION}
         empty
         emptyStatePage={
@@ -67,7 +84,7 @@ const AgentsCatalogCoreLoader: React.FC = () => {
             headerIcon={() => (
               <img src={typedEmptyImage(ProjectObjectType.modelRegistrySettings)} alt="" />
             )}
-            primaryAction={<WhosMyAdministrator />}
+            primaryAction={isMUITheme ? <KubeflowDocs /> : <WhosMyAdministrator />}
           />
         }
         headerContent={null}
