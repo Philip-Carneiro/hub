@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {
   Button,
+  Content,
   Flex,
   Stack,
   StackItem,
@@ -16,8 +17,11 @@ import { ThemeAwareSearchInput } from 'mod-arch-shared';
 import { RESET_ALL_FILTERS_LABEL } from '~/app/shared/components/catalog';
 import { AgentsCatalogContext } from '~/app/context/agentsCatalog/AgentsCatalogContext';
 import { hasAgentFiltersApplied } from '~/app/pages/agentsCatalog/utils/agentsCatalogUtils';
+import {
+  AGENTS_CATALOG_GALLERY_TITLE,
+  AGENTS_CATALOG_GALLERY_SUBTITLE,
+} from '~/app/pages/agentsCatalog/const';
 import AgentsCatalogActiveFilters from '~/app/pages/agentsCatalog/components/AgentsCatalogActiveFilters';
-import AgentsCatalogSourceLabelBlocks from './AgentsCatalogSourceLabelBlocks';
 
 type AgentsCatalogSourceLabelSelectorProps = {
   searchTerm: string;
@@ -79,6 +83,12 @@ const AgentsCatalogSourceLabelSelector: React.FC<AgentsCatalogSourceLabelSelecto
   return (
     <Stack hasGutter>
       <StackItem>
+        <Content component="h2">{AGENTS_CATALOG_GALLERY_TITLE}</Content>
+        <Content component="p" className="pf-v6-u-color-200">
+          {AGENTS_CATALOG_GALLERY_SUBTITLE}
+        </Content>
+      </StackItem>
+      <StackItem>
         <Toolbar
           className="pf-v6-u-pb-0"
           key={hasFiltersAppliedValue ? 'has-filters' : 'no-filters'}
@@ -124,14 +134,6 @@ const AgentsCatalogSourceLabelSelector: React.FC<AgentsCatalogSourceLabelSelecto
             </Flex>
           </ToolbarContent>
         </Toolbar>
-      </StackItem>
-      <StackItem>
-        <Flex
-          justifyContent={{ default: 'justifyContentSpaceBetween' }}
-          alignItems={{ default: 'alignItemsCenter' }}
-        >
-          <AgentsCatalogSourceLabelBlocks />
-        </Flex>
       </StackItem>
     </Stack>
   );
