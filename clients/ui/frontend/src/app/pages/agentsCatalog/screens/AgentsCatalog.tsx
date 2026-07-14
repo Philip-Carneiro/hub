@@ -1,9 +1,15 @@
 import * as React from 'react';
+import { Content, ContentVariants } from '@patternfly/react-core';
 import { ApplicationsPage, ProjectObjectType, TitleWithIcon } from 'mod-arch-shared';
 import { SearchIcon } from '@patternfly/react-icons';
 import { AgentsCatalogContext } from '~/app/context/agentsCatalog/AgentsCatalogContext';
 import AgentsCatalogFilters from '~/app/pages/agentsCatalog/components/AgentsCatalogFilters';
-import { AGENTS_CATALOG_TITLE, AGENTS_CATALOG_DESCRIPTION } from '~/app/pages/agentsCatalog/const';
+import {
+  AGENTS_CATALOG_TITLE,
+  AGENTS_CATALOG_DESCRIPTION,
+  AGENTS_CATALOG_GALLERY_TITLE,
+  AGENTS_CATALOG_GALLERY_SUBTITLE,
+} from '~/app/pages/agentsCatalog/const';
 import { CatalogPageLayout, EmptyCatalogState } from '~/app/shared/components/catalog';
 import AgentsCatalogSourceLabelSelector from './AgentsCatalogSourceLabelSelector';
 import AgentsCatalogGalleryView from './AgentsCatalogGalleryView';
@@ -68,12 +74,18 @@ const AgentsCatalog: React.FC = () => {
         )}
         renderFilterSidebar={() => <AgentsCatalogFilters />}
         renderToolbar={() => (
-          <AgentsCatalogSourceLabelSelector
-            searchTerm={searchQuery}
-            onSearch={handleSearch}
-            onClearSearch={handleClearSearch}
-            onResetAllFilters={handleResetAllFilters}
-          />
+          <>
+            <div>
+              <Content component={ContentVariants.h2}>{AGENTS_CATALOG_GALLERY_TITLE}</Content>
+              <Content component={ContentVariants.p}>{AGENTS_CATALOG_GALLERY_SUBTITLE}</Content>
+            </div>
+            <AgentsCatalogSourceLabelSelector
+              searchTerm={searchQuery}
+              onSearch={handleSearch}
+              onClearSearch={handleClearSearch}
+              onResetAllFilters={handleResetAllFilters}
+            />
+          </>
         )}
         renderAllItemsView={() => null}
         renderGalleryView={(isSingleCategory, singleCategoryLabel) => (

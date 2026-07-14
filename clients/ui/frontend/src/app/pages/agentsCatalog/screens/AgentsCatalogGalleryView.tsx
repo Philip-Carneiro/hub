@@ -4,6 +4,7 @@ import { SearchIcon } from '@patternfly/react-icons';
 import { AgentsCatalogContext } from '~/app/context/agentsCatalog/AgentsCatalogContext';
 import { useAgentsBySourceLabelWithAPI } from '~/app/hooks/agentsCatalog/useAgentsBySourceLabel';
 import {
+  AGENTS_CATALOG_GALLERY,
   AGENTS_CATALOG_GRID_SPAN,
   OTHER_AGENTS_DISPLAY_NAME,
 } from '~/app/pages/agentsCatalog/const';
@@ -15,8 +16,6 @@ import {
   EmptyCatalogState,
 } from '~/app/shared/components/catalog';
 import AgentsCatalogCard from '~/app/pages/agentsCatalog/components/AgentsCatalogCard';
-
-const PAGE_SIZE = 10;
 
 type AgentsCatalogGalleryViewProps = {
   handleFilterReset: () => void;
@@ -42,7 +41,7 @@ const AgentsCatalogGalleryView: React.FC<AgentsCatalogGalleryViewProps> = ({
 
   const { agents, agentsLoaded, agentsLoadError } = useAgentsBySourceLabelWithAPI(agentApiState, {
     sourceLabel: selectedSourceLabel,
-    pageSize: PAGE_SIZE,
+    pageSize: AGENTS_CATALOG_GALLERY.PAGE_SIZE,
     searchQuery,
     filterQuery: filterQuery || undefined,
   });
@@ -70,7 +69,7 @@ const AgentsCatalogGalleryView: React.FC<AgentsCatalogGalleryViewProps> = ({
       renderCard={(agent) => <AgentsCatalogCard agent={agent} />}
       getItemKey={(agent) => agent.id}
       gridSpans={AGENTS_CATALOG_GRID_SPAN}
-      hasMore={agents.hasMore && agents.items.length >= PAGE_SIZE}
+      hasMore={agents.hasMore && agents.items.length >= AGENTS_CATALOG_GALLERY.PAGE_SIZE}
       isLoadingMore={agents.isLoadingMore}
       onLoadMore={agents.loadMore}
       loadMoreLabel="Load more agents"
