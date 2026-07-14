@@ -1,6 +1,6 @@
 import type { CatalogFilterStringOption } from '~/app/shared/components/catalog';
 
-export type AgentFilterCategoryKey = 'framework' | 'communicationProtocol' | 'testedModels';
+export type AgentFilterCategoryKey = 'framework';
 
 export type AgentsCatalogFiltersState = {
   [K in AgentFilterCategoryKey]?: string[];

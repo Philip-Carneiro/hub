@@ -6,14 +6,12 @@ describe('mapBackendFilterOptions', () => {
     const raw = {
       filters: {
         framework: { type: 'string', values: ['LangGraph', 'CrewAI'] },
-        communicationProtocol: { type: 'string', values: ['A2A'] },
       },
     } as unknown as CatalogFilterOptionsList;
 
     const result = mapBackendFilterOptions(raw);
     expect(result.filters).toEqual({
       framework: { type: 'string', values: ['LangGraph', 'CrewAI'] },
-      communicationProtocol: { type: 'string', values: ['A2A'] },
     });
   });
 
@@ -38,14 +36,11 @@ describe('mapBackendFilterOptions', () => {
     const raw = {
       filters: {
         framework: { type: 'number', values: [1, 2] },
-        communicationProtocol: { type: 'string', values: ['A2A'] },
       },
     } as unknown as CatalogFilterOptionsList;
 
     const result = mapBackendFilterOptions(raw);
-    expect(result.filters).toEqual({
-      communicationProtocol: { type: 'string', values: ['A2A'] },
-    });
+    expect(result.filters).toEqual({});
   });
 
   it('returns { filters: undefined } when input filters is nullish', () => {

@@ -95,11 +95,10 @@ describe('AgentsCatalogContext', () => {
     });
     expect(result.current.filters).toEqual({ framework: ['LangGraph'] });
     act(() => {
-      result.current.setFilters((prev) => ({ ...prev, communicationProtocol: ['A2A'] }));
+      result.current.setFilters((prev) => ({ ...prev, framework: ['LangGraph', 'CrewAI'] }));
     });
     expect(result.current.filters).toEqual({
-      framework: ['LangGraph'],
-      communicationProtocol: ['A2A'],
+      framework: ['LangGraph', 'CrewAI'],
     });
   });
 

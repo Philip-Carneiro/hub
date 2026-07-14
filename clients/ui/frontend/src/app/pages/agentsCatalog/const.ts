@@ -4,16 +4,10 @@ export const AGENTS_CATALOG_TITLE = 'Agents Catalog';
 export const AGENTS_CATALOG_DESCRIPTION =
   'Discover agents that are available for your organization.';
 
-export const AGENT_FILTER_KEYS: AgentFilterCategoryKey[] = [
-  'framework',
-  'communicationProtocol',
-  'testedModels',
-];
+export const AGENT_FILTER_KEYS: AgentFilterCategoryKey[] = ['framework'];
 
 export const AGENT_FILTER_CATEGORY_NAMES: Record<AgentFilterCategoryKey, string> = {
   framework: 'Framework',
-  communicationProtocol: 'Tools',
-  testedModels: 'Tested models',
 };
 
 export const BACKEND_TO_FRONTEND_AGENT_FILTER_KEY: Record<string, AgentFilterCategoryKey> = {};
