@@ -2,10 +2,12 @@ import * as React from 'react';
 import { ApplicationsPage, ProjectObjectType, TitleWithIcon } from 'mod-arch-shared';
 import { SearchIcon } from '@patternfly/react-icons';
 import { AgentsCatalogContext } from '~/app/context/agentsCatalog/AgentsCatalogContext';
+import { hasAgentFiltersApplied } from '~/app/pages/agentsCatalog/utils/agentsCatalogUtils';
 import AgentsCatalogFilters from '~/app/pages/agentsCatalog/components/AgentsCatalogFilters';
 import { AGENTS_CATALOG_TITLE, AGENTS_CATALOG_DESCRIPTION } from '~/app/pages/agentsCatalog/const';
 import { CatalogPageLayout, EmptyCatalogState } from '~/app/shared/components/catalog';
 import AgentsCatalogSourceLabelSelector from './AgentsCatalogSourceLabelSelector';
+import AgentsCatalogAllAgentsView from './AgentsCatalogAllAgentsView';
 import AgentsCatalogGalleryView from './AgentsCatalogGalleryView';
 
 const AgentsCatalog: React.FC = () => {
@@ -15,6 +17,7 @@ const AgentsCatalog: React.FC = () => {
     clearAllFilters,
     selectedSourceLabel,
     setSelectedSourceLabel,
+    filters,
     catalogSources,
     catalogLabels,
     catalogSourcesLoaded,
@@ -22,7 +25,8 @@ const AgentsCatalog: React.FC = () => {
     setCategoryCount,
   } = React.useContext(AgentsCatalogContext);
 
-  const isAllAgentsView = false;
+  const filtersApplied = hasAgentFiltersApplied(filters, searchQuery);
+  const isAllAgentsView = selectedSourceLabel === undefined && !filtersApplied;
 
   const handleSearch = React.useCallback(
     (term: string) => {
@@ -75,10 +79,11 @@ const AgentsCatalog: React.FC = () => {
             onResetAllFilters={handleResetAllFilters}
           />
         )}
-        renderAllItemsView={() => null}
-        renderGalleryView={(_isSingleCategory, singleCategoryLabel) => (
+        renderAllItemsView={() => <AgentsCatalogAllAgentsView searchTerm={searchQuery} />}
+        renderGalleryView={(isSingleCategory, singleCategoryLabel) => (
           <AgentsCatalogGalleryView
             handleFilterReset={handleResetAllFilters}
+            isSingleCategory={isSingleCategory}
             singleCategoryLabel={singleCategoryLabel}
           />
         )}

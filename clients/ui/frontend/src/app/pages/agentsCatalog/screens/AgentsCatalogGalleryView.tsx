@@ -19,11 +19,13 @@ import AgentsCatalogCard from '~/app/pages/agentsCatalog/components/AgentsCatalo
 
 type AgentsCatalogGalleryViewProps = {
   handleFilterReset: () => void;
+  isSingleCategory?: boolean;
   singleCategoryLabel?: string;
 };
 
 const AgentsCatalogGalleryView: React.FC<AgentsCatalogGalleryViewProps> = ({
   handleFilterReset,
+  isSingleCategory = false,
   singleCategoryLabel,
 }) => {
   const {
@@ -47,13 +49,17 @@ const AgentsCatalogGalleryView: React.FC<AgentsCatalogGalleryViewProps> = ({
   const loaded = agentsLoaded && catalogLabelsLoaded;
 
   const effectiveCategoryLabel = singleCategoryLabel || selectedSourceLabel || '';
-  const categoryTitle = getLabelDisplayName(
-    effectiveCategoryLabel,
-    catalogLabels,
-    OTHER_AGENTS_DISPLAY_NAME,
-    'agents',
-  );
-  const categoryDescription = getLabelDescription(effectiveCategoryLabel, catalogLabels);
+  const categoryTitle = isSingleCategory
+    ? getLabelDisplayName(
+        effectiveCategoryLabel,
+        catalogLabels,
+        OTHER_AGENTS_DISPLAY_NAME,
+        'agents',
+      )
+    : undefined;
+  const categoryDescription = isSingleCategory
+    ? getLabelDescription(effectiveCategoryLabel, catalogLabels)
+    : undefined;
 
   return (
     <CatalogGalleryLayout
