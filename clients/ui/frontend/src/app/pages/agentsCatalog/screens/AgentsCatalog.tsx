@@ -76,10 +76,9 @@ const AgentsCatalog: React.FC = () => {
           />
         )}
         renderAllItemsView={() => null}
-        renderGalleryView={(isSingleCategory, singleCategoryLabel) => (
+        renderGalleryView={(_isSingleCategory, singleCategoryLabel) => (
           <AgentsCatalogGalleryView
             handleFilterReset={handleResetAllFilters}
-            isSingleCategory={isSingleCategory}
             singleCategoryLabel={singleCategoryLabel}
           />
         )}

@@ -1,10 +1,7 @@
 import * as React from 'react';
 import {
   Button,
-  Content,
   Flex,
-  Stack,
-  StackItem,
   Toolbar,
   ToolbarContent,
   ToolbarGroup,
@@ -17,10 +14,6 @@ import { ThemeAwareSearchInput } from 'mod-arch-shared';
 import { RESET_ALL_FILTERS_LABEL } from '~/app/shared/components/catalog';
 import { AgentsCatalogContext } from '~/app/context/agentsCatalog/AgentsCatalogContext';
 import { hasAgentFiltersApplied } from '~/app/pages/agentsCatalog/utils/agentsCatalogUtils';
-import {
-  AGENTS_CATALOG_GALLERY_TITLE,
-  AGENTS_CATALOG_GALLERY_SUBTITLE,
-} from '~/app/pages/agentsCatalog/const';
 import AgentsCatalogActiveFilters from '~/app/pages/agentsCatalog/components/AgentsCatalogActiveFilters';
 
 type AgentsCatalogSourceLabelSelectorProps = {
@@ -81,61 +74,51 @@ const AgentsCatalogSourceLabelSelector: React.FC<AgentsCatalogSourceLabelSelecto
     : undefined;
 
   return (
-    <Stack hasGutter>
-      <StackItem>
-        <Content component="h2">{AGENTS_CATALOG_GALLERY_TITLE}</Content>
-        <Content component="p" className="pf-v6-u-color-200">
-          {AGENTS_CATALOG_GALLERY_SUBTITLE}
-        </Content>
-      </StackItem>
-      <StackItem>
-        <Toolbar
-          className="pf-v6-u-pb-0"
-          key={hasFiltersAppliedValue ? 'has-filters' : 'no-filters'}
-          {...(toolbarClearAllProps ?? {})}
-        >
-          <ToolbarContent rowWrap={{ default: 'wrap' }}>
-            <Flex style={{ flex: 1 }}>
-              <ToolbarToggleGroup style={{ flex: 1 }} breakpoint="md" toggleIcon={<FilterIcon />}>
-                <ToolbarGroup
-                  style={{ flex: 1 }}
-                  variant="filter-group"
-                  gap={{ default: 'gapMd' }}
-                  alignItems="center"
-                >
-                  <ToolbarItem style={{ flex: 1 }}>
-                    <ThemeAwareSearchInput
-                      data-testid="agents-catalog-search-input"
-                      aria-label="Search agents"
-                      className="toolbar-fieldset-wrapper"
-                      placeholder="Search by name, keyword, or description"
-                      value={inputValue}
-                      onChange={handleSearchInputChange}
-                      onSearch={handleSearchInputSearch}
-                      onClear={handleClear}
-                    />
-                  </ToolbarItem>
-                  <ToolbarItem>
-                    {isMUITheme && (
-                      <Button
-                        isInline
-                        aria-label="arrow-right-button"
-                        data-testid="agents-search-button"
-                        variant="link"
-                        icon={<ArrowRightIcon />}
-                        iconPosition="right"
-                        onClick={handleSearch}
-                      />
-                    )}
-                  </ToolbarItem>
-                </ToolbarGroup>
-              </ToolbarToggleGroup>
-              {hasFiltersAppliedValue && <AgentsCatalogActiveFilters />}
-            </Flex>
-          </ToolbarContent>
-        </Toolbar>
-      </StackItem>
-    </Stack>
+    <Toolbar
+      className="pf-v6-u-pb-0"
+      key={hasFiltersAppliedValue ? 'has-filters' : 'no-filters'}
+      {...(toolbarClearAllProps ?? {})}
+    >
+      <ToolbarContent rowWrap={{ default: 'wrap' }}>
+        <Flex style={{ flex: 1 }}>
+          <ToolbarToggleGroup style={{ flex: 1 }} breakpoint="md" toggleIcon={<FilterIcon />}>
+            <ToolbarGroup
+              style={{ flex: 1 }}
+              variant="filter-group"
+              gap={{ default: 'gapMd' }}
+              alignItems="center"
+            >
+              <ToolbarItem style={{ flex: 1 }}>
+                <ThemeAwareSearchInput
+                  data-testid="agents-catalog-search-input"
+                  aria-label="Search agents"
+                  className="toolbar-fieldset-wrapper"
+                  placeholder="Search by name, keyword, or description"
+                  value={inputValue}
+                  onChange={handleSearchInputChange}
+                  onSearch={handleSearchInputSearch}
+                  onClear={handleClear}
+                />
+              </ToolbarItem>
+              <ToolbarItem>
+                {isMUITheme && (
+                  <Button
+                    isInline
+                    aria-label="arrow-right-button"
+                    data-testid="agents-search-button"
+                    variant="link"
+                    icon={<ArrowRightIcon />}
+                    iconPosition="right"
+                    onClick={handleSearch}
+                  />
+                )}
+              </ToolbarItem>
+            </ToolbarGroup>
+          </ToolbarToggleGroup>
+          {hasFiltersAppliedValue && <AgentsCatalogActiveFilters />}
+        </Flex>
+      </ToolbarContent>
+    </Toolbar>
   );
 };
 

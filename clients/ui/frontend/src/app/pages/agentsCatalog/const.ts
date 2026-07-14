@@ -4,10 +4,6 @@ export const AGENTS_CATALOG_TITLE = 'Agents Catalog';
 export const AGENTS_CATALOG_DESCRIPTION =
   'Discover agents that are available for your organization.';
 
-export const AGENTS_CATALOG_GALLERY_TITLE = 'Agent templates';
-export const AGENTS_CATALOG_GALLERY_SUBTITLE =
-  'Pre-built agent templates from the agentic starter kits collection.';
-
 export const AGENT_FILTER_KEYS: AgentFilterCategoryKey[] = [
   'framework',
   'communicationProtocol',

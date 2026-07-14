@@ -14,14 +14,9 @@ import { MODEL_CATALOG_API_VERSION } from '~/__tests__/cypress/cypress/support/c
 
 const defaultSources: CatalogSource[] = [
   mockCatalogSource({
-    id: 'community-agents-source',
-    name: 'Community Agents',
-    labels: ['community_agents'],
-  }),
-  mockCatalogSource({
-    id: 'org-agents-source',
-    name: 'Organization Agents',
-    labels: ['organization_agents'],
+    id: 'agent-templates-source',
+    name: 'Agent Templates',
+    labels: ['agent_templates'],
   }),
 ];
 
@@ -48,17 +43,12 @@ export const interceptAgentLabels = (): void => {
     mockModArchResponse({
       items: [
         mockCatalogLabel({
-          name: 'community_agents',
-          displayName: 'Community Agents',
-          description: 'Community contributed agents.',
-        }),
-        mockCatalogLabel({
-          name: 'organization_agents',
-          displayName: 'Organization Agents',
-          description: 'Agents provided by your organization.',
+          name: 'agent_templates',
+          displayName: 'Agent templates',
+          description: 'Pre-built agent templates from the agentic starter kits collection.',
         }),
       ],
-      size: 2,
+      size: 1,
       pageSize: 10,
       nextPageToken: '',
     }),

@@ -50,14 +50,14 @@ describe('Agents Catalog Gallery', () => {
   it('should display agent name and description in cards', () => {
     initAgentsCatalogIntercepts({ agentsPerCategory: 2 });
     agentsCatalog.visit();
-    agentsCatalog.findCardDetailLink('community_agents-agent-1').should('be.visible');
-    agentsCatalog.findCardDescription('community_agents-agent-1').should('be.visible');
+    agentsCatalog.findCardDetailLink('agent_templates-agent-1').should('be.visible');
+    agentsCatalog.findCardDescription('agent_templates-agent-1').should('be.visible');
   });
 
   it('should navigate to agent details when clicking card link', () => {
     initAgentsCatalogIntercepts({ agentsPerCategory: 1 });
     agentsCatalog.visit();
-    agentsCatalog.findCardDetailLink('community_agents-agent-1').click();
+    agentsCatalog.findCardDetailLink('agent_templates-agent-1').click();
     cy.url().should('include', '/agents-catalog/');
   });
 
@@ -67,7 +67,7 @@ describe('Agents Catalog Gallery', () => {
     initAgentsCatalogIntercepts({ agentsPerCategory: 1 });
     agentsCatalog.visit();
 
-    const agentId = 'community_agents-agent-1';
+    const agentId = 'agent_templates-agent-1';
     agentsCatalog.findCardLabels(agentId).should('have.length', 3);
     agentsCatalog.findCardLabels(agentId).eq(0).should('contain.text', 'LangGraph');
     agentsCatalog.findCardLabels(agentId).eq(1).should('contain.text', 'Web search');
