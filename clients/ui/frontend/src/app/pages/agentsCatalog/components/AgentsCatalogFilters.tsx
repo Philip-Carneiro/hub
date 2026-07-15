@@ -1,7 +1,11 @@
 import * as React from 'react';
 import { AgentsCatalogContext } from '~/app/context/agentsCatalog/AgentsCatalogContext';
 import { CatalogFilterPanel, useCatalogFilterConfigs } from '~/app/shared/components/catalog';
-import { AGENT_FILTER_KEYS, AGENT_FILTER_CATEGORY_NAMES } from '~/app/pages/agentsCatalog/const';
+import {
+  AGENT_FILTER_KEYS,
+  AGENT_FILTER_CATEGORY_NAMES,
+  AGENT_LABEL_MAPPINGS,
+} from '~/app/pages/agentsCatalog/const';
 
 const AgentsCatalogFilters: React.FC = () => {
   const { filters, setFilters, filterOptions, filterOptionsLoaded, filterOptionsLoadError } =
@@ -20,6 +24,7 @@ const AgentsCatalogFilters: React.FC = () => {
     filterOptions: filterOptions?.filters,
     selectedFilters: filters,
     onFilterChange,
+    labelMappings: AGENT_LABEL_MAPPINGS,
   });
 
   return (

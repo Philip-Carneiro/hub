@@ -10,6 +10,20 @@ export const AGENT_FILTER_CATEGORY_NAMES: Record<AgentFilterCategoryKey, string>
   framework: 'Framework',
 };
 
+export const AGENT_FRAMEWORK_LABEL_MAPPING: Record<string, string> = {
+  a2a: 'A2A',
+  autogen: 'Autogen',
+  'claude-code': 'Claude Code',
+  crewai: 'CrewAI',
+  'google-adk': 'Google ADK',
+  langgraph: 'LangGraph',
+  vanilla_python: 'Python', // eslint-disable-line camelcase
+};
+
+export const AGENT_LABEL_MAPPINGS: Record<string, Record<string, string>> = {
+  framework: AGENT_FRAMEWORK_LABEL_MAPPING,
+};
+
 export const BACKEND_TO_FRONTEND_AGENT_FILTER_KEY: Record<string, AgentFilterCategoryKey> = {};
 
 export const AGENTS_CATALOG_GALLERY = {

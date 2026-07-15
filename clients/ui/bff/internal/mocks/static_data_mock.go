@@ -3558,9 +3558,9 @@ func GetMcpServerCatalogLabelListMock() models.CatalogLabelList {
 // ========== Agent Catalog Mock Data ==========
 
 func GetAgentMocks() []models.Agent {
-	langgraphFramework := "LangGraph"
-	crewaiFramework := "CrewAI"
-	autogenFramework := "Autogen"
+	langgraphFramework := "langgraph"
+	crewaiFramework := "crewai"
+	autogenFramework := "autogen"
 
 	sourceID := "agent-templates-source"
 
@@ -3735,7 +3735,7 @@ func GetAgentMocks() []models.Agent {
 			SourceID:    &sourceID,
 			DisplayName: stringToPointer("Google ADK 2.0 Agent"),
 			Description: stringToPointer("General-purpose agent using Google Agent Development Kit (ADK) 2.0 with a web search tool, routing inference through a LiteLLM OpenAI-compatible API."),
-			Framework:   stringToPointer("Google ADK"),
+			Framework:   stringToPointer("google-adk"),
 			Labels:      []string{"Web search", "General purpose"},
 			Artifacts: []models.AgentArtifact{
 				{URI: "ghcr.io/example/google-adk-agent:v2.0.0"},
@@ -3749,7 +3749,7 @@ func GetAgentMocks() []models.Agent {
 			SourceID:    &sourceID,
 			DisplayName: stringToPointer("Simple Tool Calling Agent"),
 			Description: stringToPointer("Tool-calling agent built with Langflow's visual flow builder. It calls external APIs as tools (weather forecasts, national park data) and reasons over the results to answer user questions."),
-			Framework:   stringToPointer("Claude Code"),
+			Framework:   stringToPointer("claude-code"),
 			Labels:      []string{"Tool use", "MCP"},
 			Artifacts: []models.AgentArtifact{
 				{URI: "ghcr.io/example/simple-tool-calling-agent:v1.0.0"},
@@ -3777,7 +3777,7 @@ func GetAgentMocks() []models.Agent {
 			SourceID:    &sourceID,
 			DisplayName: stringToPointer("LlamaIndex Websearch Agent"),
 			Description: stringToPointer("Agent built on LlamaIndex that uses a web search tool to query the internet and use the results in its answers."),
-			Framework:   stringToPointer("A2A"),
+			Framework:   stringToPointer("a2a"),
 			Labels:      []string{"Web search", "Multi-agent"},
 			Artifacts: []models.AgentArtifact{
 				{URI: "ghcr.io/example/llamaindex-websearch:v1.0.0"},
@@ -3847,12 +3847,12 @@ func GetAgentFilterOptionsListMock() models.FilterOptionsList {
 	filters["framework"] = models.FilterOption{
 		Type: FilterOptionTypeString,
 		Values: []interface{}{
-			"A2A",
-			"Autogen",
-			"Claude Code",
-			"CrewAI",
-			"Google ADK",
-			"LangGraph",
+			"a2a",
+			"autogen",
+			"claude-code",
+			"crewai",
+			"google-adk",
+			"langgraph",
 		},
 	}
 

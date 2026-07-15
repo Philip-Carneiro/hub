@@ -15,6 +15,7 @@ import { Link, type LinkProps } from 'react-router-dom';
 import type { Agent } from '~/app/agentsCatalogTypes';
 import { getAgentsCatalogDetailsRoute } from '~/app/routes/agentsCatalog/agentsCatalog';
 import AgentsCatalogIcon from '~/app/pages/agentsCatalog/AgentsCatalogIcon';
+import { AGENT_FRAMEWORK_LABEL_MAPPING } from '~/app/pages/agentsCatalog/const';
 
 type AgentsCatalogCardProps = {
   agent: Agent;
@@ -31,7 +32,10 @@ const AgentFallbackIcon: React.FC = () => (
 
 const AgentsCatalogCard: React.FC<AgentsCatalogCardProps> = React.memo(({ agent }) => {
   const agentId = agent.id;
-  const cardLabels = [agent.framework, ...(agent.labels ?? [])].filter(Boolean);
+  const frameworkDisplay = agent.framework
+    ? (AGENT_FRAMEWORK_LABEL_MAPPING[agent.framework] ?? agent.framework)
+    : undefined;
+  const cardLabels = [frameworkDisplay, ...(agent.labels ?? [])].filter(Boolean);
   const [logoFailed, setLogoFailed] = React.useState(false);
 
   return (

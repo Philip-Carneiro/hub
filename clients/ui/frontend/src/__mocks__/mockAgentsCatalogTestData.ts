@@ -7,7 +7,7 @@ export const mockAgent = (partial?: Partial<Agent>): Agent => ({
   name: 'research-assistant',
   displayName: 'Research Assistant',
   description: 'An agent that performs research tasks using web search and summarization.',
-  framework: 'LangGraph',
+  framework: 'langgraph',
   source_id: 'agent-templates-source',
   labels: ['Web search', 'General purpose'],
   logo: undefined,
@@ -31,7 +31,7 @@ export const mockAgentsCatalogFilterOptions = (
   filters: {
     framework: {
       type: 'string',
-      values: ['A2A', 'Autogen', 'Claude Code', 'CrewAI', 'Google ADK', 'LangGraph'],
+      values: ['a2a', 'autogen', 'claude-code', 'crewai', 'google-adk', 'langgraph'],
     },
   },
   ...partial,

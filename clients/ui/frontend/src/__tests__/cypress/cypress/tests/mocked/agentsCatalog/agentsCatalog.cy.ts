@@ -61,9 +61,10 @@ describe('Agents Catalog Gallery', () => {
     cy.url().should('include', '/agents-catalog/');
   });
 
-  it('should display labels on agent cards with correct count', () => {
-    // mockAgent defaults: framework='LangGraph', labels=['Web search','General purpose']
-    // Card renders cardLabels = [framework, ...labels] = 3 labels total
+  it('should display labels on agent cards with mapped display names', () => {
+    // mockAgent defaults: framework='langgraph', labels=['Web search','General purpose']
+    // Card renders cardLabels = [frameworkDisplayName, ...labels] = 3 labels total
+    // 'langgraph' maps to 'LangGraph' via AGENT_FRAMEWORK_LABEL_MAPPING
     initAgentsCatalogIntercepts({ agentsPerCategory: 1 });
     agentsCatalog.visit();
 
