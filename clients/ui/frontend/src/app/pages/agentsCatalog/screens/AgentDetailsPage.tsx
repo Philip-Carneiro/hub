@@ -27,6 +27,7 @@ import AgentDetailsView from './AgentDetailsView';
 const AgentDetailsPage: React.FC = () => {
   const { agentId = '' } = useParams<{ agentId: string }>();
   const [agent, agentLoaded, agentLoadError] = useAgent(agentId);
+  const [logoFailed, setLogoFailed] = React.useState(false);
 
   const isNotFound = !agent && (agentLoaded || !!agentLoadError);
 
@@ -50,8 +51,13 @@ const AgentDetailsPage: React.FC = () => {
               spaceItems={{ default: 'spaceItemsMd' }}
               alignItems={{ default: 'alignItemsCenter' }}
             >
-              {agent.logo ? (
-                <img src={agent.logo} alt="agent logo" style={{ height: '40px', width: '40px' }} />
+              {agent.logo && !logoFailed ? (
+                <img
+                  src={agent.logo}
+                  alt="agent logo"
+                  style={{ height: '40px', width: '40px' }}
+                  onError={() => setLogoFailed(true)}
+                />
               ) : (
                 <AgentsCatalogIcon style={{ fontSize: '40px' }} data-testid="agent-default-icon" />
               )}

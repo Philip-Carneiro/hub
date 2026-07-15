@@ -3857,6 +3857,7 @@ func GetAgentFilterOptionsListMock() models.FilterOptionsList {
 			"llamaindex",
 			"openclaw",
 			"opencode",
+			"vanilla_python",
 		},
 	}
 

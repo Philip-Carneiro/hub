@@ -128,19 +128,6 @@ describe('Agent Details Page', () => {
         .and('have.attr', 'target', '_blank');
     });
 
-    it('should show Open GitHub button when repositoryUrl is present', () => {
-      initAgentsCatalogIntercepts();
-      const agent = mockAgent({ name: 'gh-agent', repositoryUrl: 'https://github.com/test' });
-      interceptSingleAgent(agent);
-
-      agentDetailsPage.visit('gh-agent');
-      agentDetailsPage.findGitHubButton().should('be.visible');
-      agentDetailsPage
-        .findGitHubButton()
-        .should('have.attr', 'href', 'https://github.com/test')
-        .and('have.attr', 'target', '_blank');
-    });
-
     it('should not show Open GitHub button when repositoryUrl is absent', () => {
       initAgentsCatalogIntercepts();
       const agent = mockAgent({ name: 'no-gh', repositoryUrl: undefined });
