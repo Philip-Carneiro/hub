@@ -77,7 +77,7 @@ const AgentsCatalog: React.FC = () => {
             description={
               isMUITheme
                 ? 'There are no agent templates to display. Follow the instructions in the docs below to add agent templates.'
-                : 'There are no agent templates to display. Use the Openshift console to add agent templates to the catalog.'
+                : 'There are no agent templates to display. Use the OpenShift console to add agent templates to the catalog.'
             }
             primaryAction={isMUITheme ? <KubeflowDocs /> : <WhosMyAdministrator />}
           />
