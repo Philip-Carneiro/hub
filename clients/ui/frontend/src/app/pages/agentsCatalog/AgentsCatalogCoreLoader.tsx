@@ -11,7 +11,7 @@ import {
 import { useThemeContext } from 'mod-arch-kubeflow';
 import { Outlet } from 'react-router-dom';
 import { AgentsCatalogContext } from '~/app/context/agentsCatalog/AgentsCatalogContext';
-import { EmptyCatalogState, hasSourcesWithModels } from '~/app/shared/components/catalog';
+import { EmptyCatalogState } from '~/app/shared/components/catalog';
 import { AGENTS_CATALOG_TITLE, AGENTS_CATALOG_DESCRIPTION } from '~/app/pages/agentsCatalog/const';
 
 const AgentsCatalogCoreLoader: React.FC = () => {
@@ -33,7 +33,7 @@ const AgentsCatalogCoreLoader: React.FC = () => {
         empty
         emptyStatePage={
           <Bullseye>
-            <Alert title="Agents catalog source load error" variant="danger" isInline>
+            <Alert title="Unable to load agent catalog" variant="danger" isInline>
               {catalogSourcesLoadError.message}
             </Alert>
           </Bullseye>
@@ -61,7 +61,7 @@ const AgentsCatalogCoreLoader: React.FC = () => {
     );
   }
 
-  if (catalogSources?.items?.length === 0 || !hasSourcesWithModels(catalogSources)) {
+  if (catalogSources?.items?.length === 0) {
     return (
       <ApplicationsPage
         title={
@@ -79,7 +79,7 @@ const AgentsCatalogCoreLoader: React.FC = () => {
             description={
               isMUITheme
                 ? 'To discover agents, follow the instructions in the docs below.'
-                : 'There are no agent sources to display. Request that your administrator configure agent sources for the catalog.'
+                : 'Request that your administrator configure agent template sources for this catalog.'
             }
             headerIcon={() => (
               <img src={typedEmptyImage(ProjectObjectType.modelRegistrySettings)} alt="" />
