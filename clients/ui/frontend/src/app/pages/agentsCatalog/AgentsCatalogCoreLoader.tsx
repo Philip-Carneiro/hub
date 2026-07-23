@@ -11,7 +11,7 @@ import {
 import { useThemeContext } from 'mod-arch-kubeflow';
 import { Outlet } from 'react-router-dom';
 import { AgentsCatalogContext } from '~/app/context/agentsCatalog/AgentsCatalogContext';
-import { EmptyCatalogState } from '~/app/shared/components/catalog';
+import { EmptyCatalogState, hasSourcesWithModels } from '~/app/shared/components/catalog';
 import { AGENTS_CATALOG_TITLE, AGENTS_CATALOG_DESCRIPTION } from '~/app/pages/agentsCatalog/const';
 
 const AgentsCatalogCoreLoader: React.FC = () => {
@@ -61,7 +61,7 @@ const AgentsCatalogCoreLoader: React.FC = () => {
     );
   }
 
-  if (catalogSources?.items?.length === 0) {
+  if (catalogSources?.items?.length === 0 || !hasSourcesWithModels(catalogSources)) {
     return (
       <ApplicationsPage
         title={
