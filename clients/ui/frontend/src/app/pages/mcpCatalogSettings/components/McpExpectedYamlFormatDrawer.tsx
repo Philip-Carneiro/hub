@@ -16,6 +16,14 @@ type McpExpectedYamlFormatDrawerPanelProps = {
   onClose: () => void;
 };
 
+const inlineCodeStyle: React.CSSProperties = {
+  background: 'var(--pf-t--global--background--color--secondary--default, #f0f0f0)',
+  padding: '2px 6px',
+  borderRadius: '3px',
+  fontFamily: 'var(--pf-t--global--font--family--mono, monospace)',
+  fontSize: '0.9em',
+};
+
 export const McpExpectedYamlFormatDrawerPanel: React.FC<McpExpectedYamlFormatDrawerPanelProps> = ({
   onClose,
 }) => {
@@ -47,9 +55,11 @@ export const McpExpectedYamlFormatDrawerPanel: React.FC<McpExpectedYamlFormatDra
       </DrawerHead>
       <DrawerPanelBody>
         <p className="pf-v6-u-mb-md">
-          MCP catalog sources use a YAML file with an optional <strong>source</strong> label and an{' '}
-          <strong>mcp_servers</strong> list. Each server entry maps to fields shown in the MCP
-          catalog preview. Comments in the example below describe required and optional fields.
+          MCP catalog sources use a YAML file with an optional{' '}
+          <code style={inlineCodeStyle}>source</code> label and an{' '}
+          <code style={inlineCodeStyle}>mcp_servers list</code>. Each server entry maps to fields
+          shown in the MCP catalog preview. Comments in the example below describe required and
+          optional fields.
         </p>
         <CodeBlock
           actions={

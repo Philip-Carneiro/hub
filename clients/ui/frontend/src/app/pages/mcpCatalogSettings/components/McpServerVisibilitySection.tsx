@@ -10,11 +10,7 @@ import {
 import { UpdateObjectAtPropAndValue, ThemeAwareFormGroupWrapper } from 'mod-arch-shared';
 import FormSection from '~/app/pages/modelRegistry/components/pf-overrides/FormSection';
 import { ManageMcpSourceFormData } from '~/app/pages/mcpCatalogSettings/useManageMcpSourceData';
-import {
-  MCP_FORM_LABELS,
-  MCP_PLACEHOLDERS,
-  MCP_DESCRIPTION_TEXT,
-} from '~/app/pages/mcpCatalogSettings/constants';
+import { MCP_FORM_LABELS, MCP_DESCRIPTION_TEXT } from '~/app/pages/mcpCatalogSettings/constants';
 
 type McpServerVisibilitySectionProps = {
   formData: ManageMcpSourceFormData;
@@ -36,7 +32,6 @@ const McpServerVisibilitySection: React.FC<McpServerVisibilitySectionProps> = ({
       onChange={(_event, value) => setData('includedServers', value)}
       rows={3}
       resizeOrientation="vertical"
-      placeholder={MCP_PLACEHOLDERS.INCLUDED_SERVERS}
     />
   );
 
@@ -57,7 +52,6 @@ const McpServerVisibilitySection: React.FC<McpServerVisibilitySectionProps> = ({
       onChange={(_event, value) => setData('excludedServers', value)}
       rows={3}
       resizeOrientation="vertical"
-      placeholder={MCP_PLACEHOLDERS.EXCLUDED_SERVERS}
     />
   );
 
