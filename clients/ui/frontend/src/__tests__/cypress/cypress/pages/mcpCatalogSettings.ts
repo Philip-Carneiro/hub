@@ -145,7 +145,7 @@ class McpManageSourcePage {
   }
 
   findServerVisibilitySection() {
-    return cy.findByTestId('mcp-server-visibility-section');
+    return cy.findByTestId('mcp-server-filters-section');
   }
 
   toggleServerVisibility() {

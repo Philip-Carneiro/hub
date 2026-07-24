@@ -3,7 +3,7 @@ export const MCP_FORM_LABELS = {
   YAML_CONTENT: 'Upload a YAML file',
   CATALOG_YAML_FILE: 'Catalog YAML file',
   MCP_SERVERS: 'MCP servers',
-  SERVER_VISIBILITY: 'Server filters',
+  SERVER_FILTERS: 'Server filters',
   INCLUDED_SERVERS: 'Included MCP servers',
   EXCLUDED_SERVERS: 'Excluded MCP servers',
   ENABLE_SOURCE: 'Enable source',
