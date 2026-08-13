@@ -561,6 +561,63 @@ describe('Catalog Source Configs Table', () => {
       cy.findByTestId('catalog-source-status-error-modal').should('not.exist');
     });
   });
+
+  describe('Sources refresh after mutations', () => {
+    it('should refresh catalog sources after toggling enable/disable', () => {
+      cy.intercept('PATCH', '/model-registry/api/v1/settings/model_catalog/source_configs/*', {
+        statusCode: 200,
+        body: {
+          data: mockYamlCatalogSourceConfig({ id: 'custom-yaml', isDefault: false }),
+        },
+      }).as('toggleSource');
+
+      modelCatalogSettings.visit();
+
+      cy.interceptApi(
+        'GET /api/:apiVersion/model_catalog/sources',
+        {
+          path: { apiVersion: MODEL_CATALOG_API_VERSION },
+        },
+        mockCatalogSourceList({ items: [] }),
+      ).as('sourcesRefresh');
+
+      const row = modelCatalogSettings.getRow('Custom YAML');
+      row.findName().should('be.visible');
+      row.toggleEnable();
+
+      cy.wait('@toggleSource');
+      cy.wait('@sourcesRefresh');
+    });
+
+    it('should refresh catalog sources after deleting a source', () => {
+      cy.intercept(
+        'DELETE',
+        `/model-registry/api/${MODEL_CATALOG_API_VERSION}/settings/model_catalog/source_configs/*`,
+        { statusCode: 200, body: {} },
+      ).as('deleteSource');
+
+      modelCatalogSettings.visit();
+
+      cy.interceptApi(
+        'GET /api/:apiVersion/model_catalog/sources',
+        {
+          path: { apiVersion: MODEL_CATALOG_API_VERSION },
+        },
+        mockCatalogSourceList({ items: [] }),
+      ).as('sourcesRefresh');
+
+      const row = modelCatalogSettings.getRow('HuggingFace Google');
+      row.findKebab().click();
+      cy.findByRole('menuitem', { name: 'Delete source' }).click();
+
+      deleteSourceModal.shouldBeOpen();
+      deleteSourceModal.typeConfirmation('HuggingFace Google');
+      deleteSourceModal.findDeleteButton().click();
+
+      cy.wait('@deleteSource');
+      cy.wait('@sourcesRefresh');
+    });
+  });
 });
 
 describe('Manage Source Page', () => {
@@ -1129,5 +1186,40 @@ describe('Manage Source Page', () => {
         },
       });
     });
+  });
+
+  it('should refresh catalog sources after saving a source', () => {
+    cy.intercept('GET', '/model-registry/api/v1/settings/model_catalog/source_configs/**', {
+      data: mockYamlCatalogSourceConfig({
+        id: 'source_2',
+        name: 'Source 2',
+        isDefault: false,
+        includedModels: [],
+        excludedModels: [],
+        enabled: false,
+        yaml: 'models:\n  - name: model1',
+      }),
+    });
+
+    cy.intercept('PATCH', '/model-registry/api/v1/settings/model_catalog/source_configs/*', {
+      statusCode: 200,
+      body: { data: mockYamlCatalogSourceConfig({ id: 'source_2', isDefault: false }) },
+    }).as('saveSource');
+
+    manageSourcePage.visitManageSource('source_2');
+
+    cy.interceptApi(
+      'GET /api/:apiVersion/model_catalog/sources',
+      {
+        path: { apiVersion: MODEL_CATALOG_API_VERSION },
+      },
+      mockCatalogSourceList({ items: [] }),
+    ).as('sourcesRefresh');
+
+    manageSourcePage.findSubmitButton().should('be.enabled');
+    manageSourcePage.findSubmitButton().click();
+
+    cy.wait('@saveSource');
+    cy.wait('@sourcesRefresh');
   });
 });

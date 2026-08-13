@@ -31,9 +31,8 @@ const CatalogSourceConfigsTable: React.FC<CatalogSourceConfigsTableProps> = ({
 }) => {
   const [toggleError, setToggleError] = React.useState<Error | undefined>(undefined);
   const [updatingToggleId, setUpdatingToggleId] = React.useState<string | null>(null);
-  const { apiState, refreshCatalogSourceConfigs, catalogSourcesLoadError } = React.useContext(
-    ModelCatalogSettingsContext,
-  );
+  const { apiState, refreshCatalogSourceConfigs, refreshCatalogSources, catalogSourcesLoadError } =
+    React.useContext(ModelCatalogSettingsContext);
 
   const handleEnableToggle = async (checked: boolean, catalogSourceConfig: CatalogSourceConfig) => {
     if (!apiState.apiAvailable) {
@@ -49,6 +48,7 @@ const CatalogSourceConfigsTable: React.FC<CatalogSourceConfigsTableProps> = ({
       });
       setToggleError(undefined);
       refreshCatalogSourceConfigs();
+      refreshCatalogSources();
     } catch (e) {
       if (e instanceof Error) {
         setToggleError(new Error(`Error enabling/disabling source ${catalogSourceConfig.name}`));

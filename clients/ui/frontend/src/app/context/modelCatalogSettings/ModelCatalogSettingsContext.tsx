@@ -29,6 +29,8 @@ export type ModelCatalogSettingsContextType = {
   catalogSourcesLoaded: boolean;
   catalogSourcesLoadError?: Error;
   refreshCatalogSources: () => void;
+  pendingSourceIds: Map<string, string>;
+  markSourcePending: (id: string, previousStatus: string) => void;
 };
 
 type ModelCatalogSettingsContextProviderProps = {
@@ -47,6 +49,8 @@ export const ModelCatalogSettingsContext = React.createContext<ModelCatalogSetti
   catalogSourcesLoaded: false,
   catalogSourcesLoadError: undefined,
   refreshCatalogSources: () => undefined,
+  pendingSourceIds: new Map(),
+  markSourcePending: () => undefined,
 });
 
 export const ModelCatalogSettingsContextProvider: React.FC<
@@ -65,6 +69,35 @@ export const ModelCatalogSettingsContextProvider: React.FC<
     refreshCatalogSources,
   } = useCatalogSettingsValue();
 
+  const [pendingSourceIds, setPendingSourceIds] = React.useState<Map<string, string>>(new Map());
+
+  const markSourcePending = React.useCallback((id: string, previousStatus: string) => {
+    setPendingSourceIds((prev) => {
+      const next = new Map(prev);
+      next.set(id, previousStatus);
+      return next;
+    });
+  }, []);
+
+  // Clear pending IDs only when the backend returns a genuinely new status
+  React.useEffect(() => {
+    setPendingSourceIds((prev) => {
+      if (prev.size === 0) {
+        return prev;
+      }
+      const next = new Map(prev);
+      let changed = false;
+      for (const [id, previousStatus] of prev) {
+        const source = catalogSources?.items?.find((s) => s.id === id);
+        if (!source || source.status !== previousStatus) {
+          next.delete(id);
+          changed = true;
+        }
+      }
+      return changed ? next : prev;
+    });
+  }, [catalogSources]);
+
   const contextValue = React.useMemo(
     () => ({
       apiState,
@@ -77,6 +110,8 @@ export const ModelCatalogSettingsContextProvider: React.FC<
       catalogSourcesLoaded,
       catalogSourcesLoadError,
       refreshCatalogSources,
+      pendingSourceIds,
+      markSourcePending,
     }),
     [
       apiState,
@@ -89,6 +124,8 @@ export const ModelCatalogSettingsContextProvider: React.FC<
       catalogSourcesLoaded,
       catalogSourcesLoadError,
       refreshCatalogSources,
+      pendingSourceIds,
+      markSourcePending,
     ],
   );
 
