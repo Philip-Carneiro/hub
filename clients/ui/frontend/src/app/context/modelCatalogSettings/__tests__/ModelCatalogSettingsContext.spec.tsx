@@ -75,7 +75,7 @@ describe('ModelCatalogSettingsContext — pendingSourceIds clearing', () => {
     jest.clearAllMocks();
   });
 
-  it('should clear pending entry when backend returns a different status', () => {
+  it('should skip three stale responses and clear on fourth', () => {
     mockCatalogSources = {
       ...emptySources,
       items: [{ id: 'src-1', name: 'S1', labels: [], status: CatalogSourceStatus.AVAILABLE }],
@@ -92,53 +92,35 @@ describe('ModelCatalogSettingsContext — pendingSourceIds clearing', () => {
 
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const polling = require('~/app/shared/catalogSettings/hooks/useCatalogSourcesWithPolling');
-    mockCatalogSources = {
+    const errorSources = {
       ...emptySources,
       items: [{ id: 'src-1', name: 'S1', labels: [], status: CatalogSourceStatus.ERROR }],
     };
+
+    // 1st, 2nd, 3rd responses (stale) — all skipped
+    for (let i = 0; i < 3; i++) {
+      (polling.useCatalogSourcesWithPolling as jest.Mock).mockReturnValue([
+        { ...errorSources },
+        true,
+        undefined,
+        mockRefreshCatalogSources,
+      ]);
+      rerender();
+      expect(result.current.pendingSourceIds.has('src-1')).toBe(true);
+    }
+
+    // 4th response — accepted, pending clears
     (polling.useCatalogSourcesWithPolling as jest.Mock).mockReturnValue([
-      mockCatalogSources,
+      { ...errorSources },
       true,
       undefined,
       mockRefreshCatalogSources,
     ]);
-
     rerender();
-
     expect(result.current.pendingSourceIds.has('src-1')).toBe(false);
   });
 
-  it('should clear pending entry when source disappears from response (deletion)', () => {
-    mockCatalogSources = {
-      ...emptySources,
-      items: [{ id: 'src-1', name: 'S1', labels: [], status: CatalogSourceStatus.AVAILABLE }],
-    };
-
-    const { result, rerender } = renderHook(() => React.useContext(ModelCatalogSettingsContext), {
-      wrapper,
-    });
-
-    act(() => {
-      result.current.markSourcePending('src-1', CatalogSourceStatus.AVAILABLE);
-    });
-    expect(result.current.pendingSourceIds.has('src-1')).toBe(true);
-
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const polling = require('~/app/shared/catalogSettings/hooks/useCatalogSourcesWithPolling');
-    mockCatalogSources = { ...emptySources, items: [] };
-    (polling.useCatalogSourcesWithPolling as jest.Mock).mockReturnValue([
-      mockCatalogSources,
-      true,
-      undefined,
-      mockRefreshCatalogSources,
-    ]);
-
-    rerender();
-
-    expect(result.current.pendingSourceIds.has('src-1')).toBe(false);
-  });
-
-  it('should keep pending entry when backend returns the same status', () => {
+  it('should skip three stale responses and clear on fourth (same status)', () => {
     mockCatalogSources = {
       ...emptySources,
       items: [{ id: 'src-1', name: 'S1', labels: [], status: CatalogSourceStatus.AVAILABLE }],
@@ -159,15 +141,27 @@ describe('ModelCatalogSettingsContext — pendingSourceIds clearing', () => {
       ...emptySources,
       items: [{ id: 'src-1', name: 'S1', labels: [], status: CatalogSourceStatus.AVAILABLE }],
     };
+
+    // 1st, 2nd, 3rd responses — all skipped
+    for (let i = 0; i < 3; i++) {
+      (polling.useCatalogSourcesWithPolling as jest.Mock).mockReturnValue([
+        { ...sameSources },
+        true,
+        undefined,
+        mockRefreshCatalogSources,
+      ]);
+      rerender();
+      expect(result.current.pendingSourceIds.has('src-1')).toBe(true);
+    }
+
+    // 4th response — accepted, pending clears even with same status
     (polling.useCatalogSourcesWithPolling as jest.Mock).mockReturnValue([
-      sameSources,
+      { ...sameSources },
       true,
       undefined,
       mockRefreshCatalogSources,
     ]);
-
     rerender();
-
-    expect(result.current.pendingSourceIds.has('src-1')).toBe(true);
+    expect(result.current.pendingSourceIds.has('src-1')).toBe(false);
   });
 });
